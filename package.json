@@ -1,5 +1,5 @@
 {
-  "name": "grapesite",
+  "name": "grapesjs-studio-local",
   "version": "1.0.0",
   "description": "A visual website builder powered by GrapesJS with multi-page editing, symbols, project import/export, and page-level SEO settings.",
   "license": "GPL-3.0",
