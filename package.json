@@ -1,0 +1,14 @@
+{
+  "name": "grapesite",
+  "version": "1.0.0",
+  "description": "A visual website builder powered by GrapesJS with multi-page editing, symbols, project import/export, and page-level SEO settings.",
+  "license": "GPL-3.0",
+  "private": true,
+  "scripts": {
+    "start": "python3 -m http.server 8099"
+  },
+  "dependencies": {
+    "grapesjs": "^0.22.16",
+    "jszip": "^3.10.1"
+  }
+}
