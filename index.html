@@ -898,8 +898,8 @@
           const lower = file.name.toLowerCase();
           try {
             if (lower.endsWith('.zip')) await doImportZipFile(file);
-            else if (lower.endsWith('.json') || lower.endsWith('.gjs')) await doImportProjectFile(file);
-            else showToast('Choose a .json (project) or .zip (website) file', 'error');
+            else if (lower.endsWith('.grapesjs') || lower.endsWith('.gjs') || lower.endsWith('.json')) await doImportProjectFile(file);
+            else showToast('Choose a .grapesjs (project), .json (project) or .zip (website) file', 'error');
           } catch (err) {
             console.error(err);
             showToast('Could not read that file', 'error');
@@ -909,12 +909,12 @@
         function importDialog() {
           const input = document.createElement('input');
           input.type = 'file';
-          input.accept = '.json,.gjs,.zip,application/json,application/zip';
+          input.accept = '.grapesjs,.gjs,.json,.zip,application/json,application/zip';
           input.className = 'gs-file';
           openModal({
             title: 'Import',
             bodyHTML:
-              '<p class="gs-modal-hint"><b>Project file (.json)</b> — loads a full GrapeSite project: every page, symbol, asset and style.</p>' +
+              '<p class="gs-modal-hint"><b>Project file (.grapesjs / .json)</b> — loads a full GrapeSite project: every page, symbol, asset and style.</p>' +
               '<p class="gs-modal-hint"><b>Website (.zip)</b> — replaces the current page with the <b>index.html</b> from the exported site.</p>',
             actions: [
               { label: 'Cancel', variant: 'ghost', onClick: closeModal },
