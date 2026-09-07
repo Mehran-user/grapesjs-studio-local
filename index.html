@@ -43,11 +43,13 @@
         </nav>
         <aside class="gs-left-panel" id="leftPanel"></aside>
         <div id="editor"></div>
+        <aside class="gs-right-panel" id="rightPanel"></aside>
         <nav class="gs-rail gs-rail--right" id="railRight">
           <button type="button" class="gs-rail-btn" data-side="layers" data-tip="Layers"></button>
           <button type="button" class="gs-rail-btn" data-side="blocks" data-tip="Blocks"></button>
           <button type="button" class="gs-rail-btn" data-side="styles" data-tip="Styles"></button>
           <button type="button" class="gs-rail-btn" data-side="traits" data-tip="Properties"></button>
+          <button type="button" class="gs-rail-btn" data-side="global" data-tip="Global"></button>
           <button type="button" class="gs-rail-btn" data-side="assets" data-tip="Assets"></button>
         </nav>
       </div>
@@ -100,6 +102,7 @@
             pencil: '<path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M17 3a2.8 2.8 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>',
             symbols: '<path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M18.178 8c5.096 0 5.096 8 0 8-5.095 0-7.133-8-12.739-8-4.585 0-4.585 8 0 8 5.606 0 7.644-8 12.74-8z"/>',
             settings: '<circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="1.8"/><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/>',
+            palette: '<path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M12 22a10 10 0 1 1 10-10c0 1.66-1.34 3-3 3h-2.1a2.9 2.9 0 0 0-2.03 4.98A2.9 2.9 0 0 1 12 22Z"/><circle cx="7.5" cy="11.5" r="1" fill="currentColor"/><circle cx="11" cy="7.5" r="1" fill="currentColor"/><circle cx="16" cy="9.5" r="1" fill="currentColor"/>',
           };
           const d = paths[name] || '';
           return '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">' + d + '</svg>';
@@ -684,6 +687,298 @@
           syncRail();
         }
 
+        /* --- Global variables (custom right panel) --- */
+        const rightPanel = el('rightPanel');
+        let variablesOpen = false;
+        let syncingVars = false;
+
+        function toHex(color) {
+          if (!color) return '#000000';
+          if (color.charAt(0) === '#') return /^#[0-9a-fA-F]{6}$/.test(color) || /^#[0-9a-fA-F]{3}$/.test(color) ? color : '#000000';
+          const m = String(color).match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+          if (m) {
+            return '#' + [1, 2, 3].map((i) => ('0' + parseInt(m[i], 10).toString(16)).slice(-2)).join('');
+          }
+          return '#000000';
+        }
+
+        function fieldType(rec) {
+          const f = rec.get('field');
+          if (typeof f === 'string') return f;
+          return (f && f.type) || 'text';
+        }
+
+        function fieldUnits(rec) {
+          const f = rec.get('field');
+          if (f && Array.isArray(f.units) && f.units.length) return f.units;
+          return ['px', 'rem', 'em', '%'];
+        }
+
+        function selectOptions(rec) {
+          const f = rec.get('field');
+          const list = (f && f.options) || [];
+          return list.map((o) => {
+            if (typeof o === 'string') return { id: o, label: o };
+            return { id: o.id, label: o.label != null ? o.label : o.id };
+          });
+        }
+
+        function varInputHTML(rec) {
+          const prop = rec.get('property') || 'value';
+          const value = rec.get('value');
+          const t = fieldType(rec);
+          const escv = (s) => esc(s == null ? '' : String(s));
+          if (t === 'color') {
+            return '<span class="gs-var-color">' +
+              '<input type="text" class="gs-var-text" value="' + escv(value) + '" data-var-input spellcheck="false">' +
+              '<input type="color" class="gs-var-picker" value="' + toHex(value) + '">' +
+              '</span>';
+          }
+          if (t === 'number') {
+            return '<input type="number" class="gs-var-num" value="' + escv(value).replace(/[^0-9.\-]/g, '') + '" data-var-input step="any">';
+          }
+          if (t === 'slider') {
+            return '<input type="range" class="gs-var-range" data-var-input>';
+          }
+          if (t === 'select') {
+            const opts = selectOptions(rec);
+            return '<select class="gs-var-select" data-var-input>' +
+              opts.map((o) => '<option value="' + escv(o.id) + '"' + (String(o.id) === String(value) ? ' selected' : '') + '>' + escv(o.label) + '</option>').join('') +
+              '</select>';
+          }
+          return '<input type="text" class="gs-var-text" value="' + escv(value) + '" data-var-input spellcheck="false">';
+        }
+
+        function renderVariables() {
+          if (!variablesOpen) return;
+          syncVarRules();
+          const dss = editor.DataSources.getAll();
+          const groups = {};
+          dss.forEach((ds) => {
+            ds.getRecords().forEach((rec) => {
+              if (!rec.get('property')) return;
+              const cat = rec.get('category');
+              const catLabel =
+                cat && typeof cat === 'object' ? cat.label || 'General' : typeof cat === 'string' ? cat : 'General';
+              (groups[catLabel] = groups[catLabel] || []).push({ ds: ds, rec: rec });
+            });
+          });
+          const head =
+            '<div class="gs-pages-head"><span>Global</span></div>' +
+            '<div class="gs-var-hint">Theme values and CSS variables applied across the whole project. Changes update every page instantly.</div>' +
+            '<button type="button" class="gs-pages-add" id="varAdd">' + icon('plus') + '<span>Add variable</span></button>';
+          const keys = Object.keys(groups);
+          let list = '<div class="gs-var-list">';
+          keys.forEach((k) => {
+            list += '<div class="gs-var-group"><div class="gs-var-group-title">' + esc(k) + '</div>';
+            groups[k].forEach(({ ds, rec }) => {
+              const prop = rec.get('property');
+              const sel = rec.get('selector') || '';
+              const label = rec.get('label') || rec.id || prop;
+              list +=
+                '<div class="gs-var-row" data-dsid="' + esc(ds.id) + '" data-rec="' + esc(rec.id) + '">' +
+                '<div class="gs-var-row-head">' +
+                '<span class="gs-var-label" title="' + esc(label) + '">' + esc(label) + '</span>' +
+                '<button type="button" class="gs-page-act gs-var-del" title="Remove variable">' + icon('trash') + '</button>' +
+                '</div>' +
+                varInputHTML(rec) +
+                '<span class="gs-var-meta">' + esc(sel) + ' ' + esc(prop) + '</span>' +
+                '</div>';
+            });
+            list += '</div>';
+          });
+          list += '</div>';
+          rightPanel.innerHTML = head + (keys.length ? list : '<div class="gs-symbol-empty">No global variables yet. Add one to define a reusable theme value.</div>');
+          const addBtn = rightPanel.querySelector('#varAdd');
+          if (addBtn) addBtn.addEventListener('click', addVariableDialog);
+        }
+
+        function findVarRule(sel, prop) {
+          const propKey = prop == null ? '' : String(prop);
+          const rules = editor.Css.getAll();
+          let r = rules.find((x) => !x.get('atRuleType') && x.getStyle() && propKey && x.getStyle()[propKey] !== undefined);
+          if (r) return r;
+          const s = String(sel || ':root').trim();
+          return rules.find((x) => {
+            if (x.get('atRuleType')) return false;
+            if (!s) return false;
+            try {
+              return x.selectorsToString().split(',').map((t) => t.trim()).includes(s);
+            } catch (e) {
+              return false;
+            }
+          }) || null;
+        }
+
+        function syncVarRules() {
+          if (syncingVars) return;
+          syncingVars = true;
+          try {
+            editor.DataSources.getAll().forEach((ds) => {
+              ds.getRecords().forEach((rec) => {
+                const prop = rec.get('property');
+                if (!prop) return;
+                const sel = rec.get('selector') || ':root';
+                if (findVarRule(sel, prop)) return;
+                editor.Css.addRules(sel + '{' + prop + ':' + String(rec.get('value')) + '}');
+              });
+            });
+          } catch (e) {
+            console.warn('syncVarRules', e);
+          } finally {
+            syncingVars = false;
+          }
+        }
+
+        function applyVarValue(dsId, recId, value) {
+          const ds = editor.DataSources.get(dsId);
+          const rec = ds && ds.getRecord(recId);
+          if (!rec) return;
+          const prop = rec.get('property');
+          const sel = rec.get('selector') || ':root';
+          rec.set('value', value);
+          if (!prop) return;
+          let rule = findVarRule(sel, prop);
+          if (!rule) rule = editor.Css.addRules(sel + '{' + prop + ':' + String(value) + '}')[0];
+          rule.addStyle({ [prop]: value });
+        }
+
+        function deleteVar(dsId, recId) {
+          const ds = editor.DataSources.get(dsId);
+          const rec = ds && ds.getRecord(recId);
+          if (!rec) return;
+          const prop = rec.get('property');
+          const sel = rec.get('selector') || ':root';
+          const label = rec.get('label') || rec.id || prop;
+          if (!confirm('Remove variable "' + label + '"?')) return;
+          try {
+            ds.removeRecord(recId);
+          } catch (e) {}
+          const rule = findVarRule(sel, prop);
+          if (rule) {
+            rule.removeStyle(prop);
+            const style = rule.getStyle() || {};
+            if (!Object.keys(style).length) editor.Css.remove(rule);
+          }
+          renderVariables();
+          showToast('Variable removed');
+        }
+
+        function addVariableDialog() {
+          openModal({
+            title: 'New global variable',
+            bodyHTML:
+              '<p class="gs-modal-hint">Define a CSS variable (or any other global declaration) that applies site-wide. Use the value everywhere via <b>var(--name)</b>.</p>' +
+              '<label class="gs-field" for="gs-var-name"><span class="gs-field-label">Name</span><input id="gs-var-name" type="text" spellcheck="false"></label>' +
+              '<label class="gs-field" for="gs-var-prop"><span class="gs-field-label">CSS property</span><input id="gs-var-prop" type="text" placeholder="--brand-color" spellcheck="false"><span class="gs-field-hint">Custom properties start with <b>--</b>.</span></label>' +
+              '<label class="gs-field" for="gs-var-sel"><span class="gs-field-label">Selector</span><input id="gs-var-sel" type="text" value=":root" spellcheck="false"><span class="gs-field-hint">Element that receives the declaration (default <b>:root</b> so components can reference it).</span></label>' +
+              '<label class="gs-field" for="gs-var-type"><span class="gs-field-label">Type</span>' +
+              '<select id="gs-var-type"><option value="color">Color</option><option value="text">Text</option><option value="number">Number</option></select></label>' +
+              '<label class="gs-field" for="gs-var-value"><span class="gs-field-label">Value</span><input id="gs-var-value" type="text" value="#000000" spellcheck="false"></label>',
+            actions: [
+              { label: 'Cancel', variant: 'ghost', onClick: closeModal },
+              { label: 'Add', variant: 'primary', onClick: onAddVariable },
+            ],
+          });
+        }
+
+        function onAddVariable() {
+          const name = el('gs-var-name').value.trim();
+          const prop = el('gs-var-prop').value.trim();
+          const sel = (el('gs-var-sel').value.trim() || ':root').trim();
+          const type = el('gs-var-type').value;
+          const value = el('gs-var-value').value.trim() || '#000000';
+          if (!prop) {
+            showToast('CSS property is required', 'error');
+            return;
+          }
+          let ds = editor.DataSources.get('globalStyles');
+          if (!ds) ds = editor.DataSources.add({ id: 'globalStyles', records: [] });
+          const recId = 'v' + Date.now().toString(36);
+          ds.addRecord({
+            id: recId,
+            label: name || prop,
+            property: prop,
+            selector: sel,
+            value: value,
+            field: { row: true, type: type },
+            defaultValue: value,
+            _internal: true,
+            _undo: true,
+          });
+          let rule = findVarRule(sel, prop);
+          if (!rule) rule = editor.Css.addRules(sel + '{' + prop + ':' + String(value) + '}')[0];
+          rule.addStyle({ [prop]: value });
+          closeModal();
+          renderVariables();
+          showToast('Variable added');
+        }
+
+        function toggleVariables() {
+          if (variablesOpen) closeVariables();
+          else openVariables();
+        }
+        function openVariables() {
+          closeAllViews();
+          variablesOpen = true;
+          rightPanel.classList.add('open');
+          setRightOpen(true);
+          renderVariables();
+          syncRail();
+        }
+        function closeVariables() {
+          variablesOpen = false;
+          rightPanel.classList.remove('open');
+          setRightOpen(false);
+          rightPanel.innerHTML = '';
+          syncRail();
+        }
+
+        rightPanel.addEventListener('input', (e) => {
+          const input = e.target.closest('[data-var-input], .gs-var-picker');
+          if (!input) return;
+          const row = input.closest('.gs-var-row');
+          if (!row) return;
+          const dsId = row.dataset.dsid;
+          const recId = row.dataset.rec;
+          const ds = editor.DataSources.get(dsId);
+          const rec = ds && ds.getRecord(recId);
+          if (!rec) return;
+          const t = fieldType(rec);
+          let value;
+          if (t === 'color') {
+            const isPicker = input.classList && input.classList.contains('gs-var-picker');
+            value = input.value;
+            if (isPicker) {
+              const text = row.querySelector('.gs-var-text');
+              if (text) text.value = input.value;
+            } else {
+              const picker = row.querySelector('.gs-var-picker');
+              if (picker && /^#[0-9a-fA-F]{3,6}$/.test(value.trim())) picker.value = value.trim();
+            }
+          } else {
+            value = input.value;
+            if (t === 'number' && value !== '') {
+              const cur = String(rec.get('value'));
+              const unit = cur.match(/[a-z%]+$/i) ? cur.match(/[a-z%]+$/i)[0] : '';
+              value = value + unit;
+            }
+          }
+          applyVarValue(dsId, recId, value);
+        });
+
+        rightPanel.addEventListener('click', (e) => {
+          const del = e.target.closest('.gs-var-del');
+          if (!del) return;
+          const row = del.closest('.gs-var-row');
+          if (!row) return;
+          deleteVar(row.dataset.dsid, row.dataset.rec);
+        });
+
+        editor.on('data:add data:update data:remove', () => {
+          if (variablesOpen) renderVariables();
+        });
+
         /* --- Assets (core modal) --- */
         function toggleAssets() {
           editor.runCommand('core:open-assets');
@@ -698,17 +993,19 @@
           blocks: () => toggleView(CMD.blocks),
           styles: () => toggleView(CMD.styles),
           traits: () => toggleView(CMD.traits),
+          global: toggleVariables,
           assets: toggleAssets,
         };
 
         function syncRail() {
           const rightActive = VIEW_CMDS.filter((c) => editor.Commands.isActive(c))[0];
-          setRightOpen(!!rightActive);
+          setRightOpen(!!rightActive || variablesOpen);
           document.querySelectorAll('.gs-rail-btn[data-side]').forEach((btn) => {
             const side = btn.dataset.side;
             let active = false;
             if (side === 'pages') active = pagesOpen;
             else if (side === 'symbols') active = symbolsOpen;
+            else if (side === 'global') active = variablesOpen;
             else if (side === 'assets') active = false;
             else active = rightActive === CMD[side];
             btn.classList.toggle('active', active);
@@ -885,6 +1182,7 @@
           renderPages();
           updateProjectName();
           if (symbolsOpen) renderSymbols();
+          if (variablesOpen) renderVariables();
           closeModal();
           showToast('Project imported from ' + file.name);
         }
@@ -1045,6 +1343,7 @@
           editor.runCommand('core:open-blocks');
           updateProjectName();
           syncRail();
+          setTimeout(syncVarRules, 0);
         });
 
         window.editor = editor;
