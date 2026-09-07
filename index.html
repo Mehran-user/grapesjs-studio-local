@@ -1157,11 +1157,23 @@
         async function doImportZipFile(file) {
           try {
             const zip = await JSZip.loadAsync(file);
-            const names = Object.keys(zip.files).filter(
-              (n) => !zip.files[n].dir && n.toLowerCase().endsWith('.html')
-            );
+            const allFiles = Object.keys(zip.files).filter((n) => !zip.files[n].dir);
+            const projectFile = allFiles.find((n) => n.toLowerCase().endsWith('.grapesjs') || n.toLowerCase().endsWith('.gjs') || n.toLowerCase().endsWith('.json'));
+            if (projectFile) {
+              const text = await zip.files[projectFile].async('string');
+              const data = JSON.parse(text);
+              editor.loadProjectData(data);
+              renderPages();
+              updateProjectName();
+              if (symbolsOpen) renderSymbols();
+              if (variablesOpen) renderVariables();
+              closeModal();
+              showToast('Project imported from ' + projectFile);
+              return;
+            }
+            const names = allFiles.filter((n) => n.toLowerCase().endsWith('.html'));
             if (!names.length) {
-              showToast('No HTML file found in the archive', 'error');
+              showToast('No importable file found in the archive', 'error');
               return;
             }
             const preferred = names.find((n) => n.toLowerCase().endsWith('index.html')) || names[0];
