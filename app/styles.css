@@ -808,17 +808,6 @@ html, body {
   color: #a1a1aa;
 }
 .gs-field-hint { display: block; margin-top: 5px; font-size: 12px; color: #6f7078; font-weight: 400; }
-.gs-field-sep { height: 1px; background: #2f3034; margin: 14px 0; }
-.gs-clone-warn {
-  margin: 8px 0 0;
-  padding: 9px 11px;
-  border: 1px solid rgba(125, 75, 255, 0.35);
-  border-radius: 8px;
-  background: rgba(125, 75, 255, 0.08);
-  color: #b3b4bd;
-  font-size: 12px;
-  line-height: 1.5;
-}
 .gs-field input,
 .gs-field textarea,
 .gs-field-input {
