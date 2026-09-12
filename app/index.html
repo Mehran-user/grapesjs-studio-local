@@ -137,6 +137,13 @@
 
     <div class="gs-toast-wrap" id="toasts"></div>
 
+    <div class="gs-progress" id="progress" hidden>
+      <div class="gs-progress__track">
+        <div class="gs-progress__bar" id="progressBar"></div>
+      </div>
+      <div class="gs-progress__msg" id="progressMsg"></div>
+    </div>
+
     <div class="gs-modal" id="modal" hidden>
       <div class="gs-modal__backdrop" data-close></div>
       <div class="gs-modal__dialog" role="dialog" aria-modal="true">
@@ -228,6 +235,38 @@
             setTimeout(() => t.remove(), 300);
           }, 2600);
         }
+
+        /* ------------------------------------------------------------------ */
+        /*  Progress bar                                                       */
+        /* ------------------------------------------------------------------ */
+        function showProgress(msg, pct) {
+          el('progress').hidden = false;
+          el('progressMsg').textContent = msg || '';
+          if (typeof pct === 'number') {
+            el('progress').classList.remove('gs-progress--busy');
+            el('progressBar').style.width = Math.max(0, Math.min(100, pct)) + '%';
+          } else {
+            el('progress').classList.add('gs-progress--busy');
+            el('progressBar').style.width = '';
+          }
+        }
+        function setProgress(pct) {
+          if (el('progress').hidden) return;
+          el('progress').classList.remove('gs-progress--busy');
+          el('progressBar').style.width = Math.max(0, Math.min(100, pct)) + '%';
+        }
+        function hideProgress() {
+          el('progress').classList.remove('gs-progress--busy');
+          el('progressBar').style.width = '0%';
+          setTimeout(() => {
+            if (el('progress').hidden) return;
+            el('progress').hidden = true;
+            el('progressBar').style.width = '';
+          }, 300);
+        }
+        window.showProgress = showProgress;
+        window.setProgress = setProgress;
+        window.hideProgress = hideProgress;
 
         /* ------------------------------------------------------------------ */
         /*  Modal                                                              */
@@ -1215,7 +1254,13 @@
               used.add(fname);
               zip.file(fname, buildPageDoc(page));
             });
-            const blob = await zip.generateAsync({ type: 'blob' });
+            const blob = await zip.generateAsync(
+              { type: 'blob' },
+              (meta) => {
+                showProgress('Packaging ' + slug(name) + '.zip…', Math.round(meta.percent || 0));
+              }
+            );
+            hideProgress();
             triggerDownload(filename, blob);
             closeModal();
             showToast('Exported ' + pages.length + ' page' + (pages.length === 1 ? '' : 's') + ' as ' + filename);
@@ -1265,8 +1310,12 @@
           let data = null;
           let html = null;
           try {
+            showProgress('Importing «' + base + '»…', 10);
             if (lower.endsWith('.zip')) {
-              const zip = await JSZip.loadAsync(file);
+              const zip = await JSZip.loadAsync(
+                file,
+                (meta) => showProgress('Unpacking ' + file.name + '…', 10 + Math.round((meta.percent || 0) * 0.4))
+              );
               const allFiles = Object.keys(zip.files).filter((n) => !zip.files[n].dir);
               const projectFile = allFiles.find((n) => n.toLowerCase().endsWith('.grapesjs') || n.toLowerCase().endsWith('.gjs') || n.toLowerCase().endsWith('.json'));
               if (projectFile) {
@@ -1274,6 +1323,7 @@
               } else {
                 const names = allFiles.filter((n) => n.toLowerCase().endsWith('.html'));
                 if (!names.length) {
+                  hideProgress();
                   showToast('No importable file found in the archive', 'error');
                   return;
                 }
@@ -1283,10 +1333,12 @@
             } else if (lower.endsWith('.grapesjs') || lower.endsWith('.gjs') || lower.endsWith('.json')) {
               data = JSON.parse(await file.text());
             } else {
+              hideProgress();
               showToast('Choose a .grapesjs (project), .json (project) or .zip (website) file', 'error');
               return;
             }
           } catch (err) {
+            hideProgress();
             console.error(err);
             showToast('Could not read that file', 'error');
             return;
@@ -1299,6 +1351,7 @@
             if (!defaultProjectData) defaultProjectData = editor.getProjectData();
             projData = JSON.parse(JSON.stringify(defaultProjectData));
           }
+          setProgress(65);
           writeProj(id, projData);
           const list = readRegistry();
           list.unshift({ id, name: base, createdAt: Date.now(), updatedAt: Date.now() });
@@ -1308,6 +1361,8 @@
             editor.setComponents(html);
             persistCurrent();
           }
+          setProgress(100);
+          hideProgress();
           closeModal();
           showToast('Project «' + base + '» imported from ' + file.name);
         }
@@ -1447,6 +1502,7 @@
         function persistCurrent() {
           if (!currentProjectId) return false;
           try {
+            showProgress('Saving…');
             writeProj(currentProjectId, editor.getProjectData());
             const list = readRegistry();
             const rec = list.find((r) => r.id === currentProjectId);
@@ -1454,8 +1510,10 @@
               rec.updatedAt = Date.now();
               writeRegistry(list);
             }
+            hideProgress();
             return true;
           } catch (err) {
+            hideProgress();
             console.error('Could not save project', err);
             return false;
           }
@@ -1606,12 +1664,22 @@
           const list = readRegistry();
           list.unshift({ id, name: clean, createdAt: Date.now(), updatedAt: Date.now() });
           writeRegistry(list);
-          openProject(id);
-          const html = await fetchPageHtml(cloneUrl);
-          const safe = stripJsFromHtml(html);
-          editor.setComponents(safe);
-          persistCurrent();
-          showToast('Cloned into «' + clean + '»');
+          try {
+            showProgress('Cloning «' + clean + '»…', 12);
+            openProject(id);
+            const html = await fetchPageHtml(cloneUrl);
+            setProgress(60);
+            const safe = stripJsFromHtml(html);
+            editor.setComponents(safe);
+            setProgress(95);
+            persistCurrent();
+            setProgress(100);
+            hideProgress();
+            showToast('Cloned into «' + clean + '»');
+          } catch (err) {
+            hideProgress();
+            throw err;
+          }
         }
 
         function createProject(name) {
