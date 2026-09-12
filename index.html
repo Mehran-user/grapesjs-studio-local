@@ -4,13 +4,86 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>GrapesJS Studio</title>
-    <link rel="stylesheet" href="node_modules/grapesjs/dist/css/grapes.min.css" />
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4W8BZD9JZT"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-4W8BZD9JZT');
+    </script>
+    <link rel="stylesheet" href="vendor/grapes.min.css" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <section id="home" class="gs-home">
+      <aside class="gs-home-side">
+        <div class="gs-home-brand">
+          <span class="gs-home-logo" id="homeLogo"></span>
+          <span class="gs-home-name">GrapeSite</span>
+        </div>
+        <div class="gs-home-ws">
+          <span class="gs-home-ws__icon"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M10 13a2 2 0 1 1 4 0c0 .8-.4 1.3-1 1.7V16a1 1 0 1 1-2 0v-1.3c-.6-.4-1-.9-1-1.7Z"/><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M12 20a8 8 0 1 1 0-16 8 8 0 0 1 0 16Z"/><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.8"/><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M3.5 12h17M12 3.5c2.2 2.4 3.3 5.2 3.3 8.5s-1.1 6.1-3.3 8.5c-2.2-2.4-3.3-5.2-3.3-8.5s1.1-6.1 3.3-8.5Z"/></svg></span>
+          <span class="gs-home-ws__name">Default Workspace</span>
+          <span class="gs-home-ws__chev"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/></svg></span>
+        </div>
+        <div class="gs-home-nav-label">Studio</div>
+        <nav class="gs-home-nav">
+          <a href="#" class="gs-home-nav__item active" data-nav="projects">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M3 6.5A1.5 1.5 0 0 1 4.5 5h4l2 2.5h9a1.5 1.5 0 0 1 1.5 1.5V17.5A1.5 1.5 0 0 1 19.5 19h-15A1.5 1.5 0 0 1 3 17.5Z"/></svg>
+            <span>Projects</span>
+          </a>
+        </nav>
+        <div class="gs-home-side-foot">
+          <span class="gs-home-side-foot__dot"></span>
+          Local workspace · saved in this browser
+        </div>
+      </aside>
+      <main class="gs-home-main">
+        <header class="gs-home-head">
+          <h1 class="gs-home-title">Projects</h1>
+          <p class="gs-home-count" id="projCount"></p>
+        </header>
+        <div class="gs-home-toolbar">
+          <select class="gs-home-select" aria-label="All projects">
+            <option>All projects</option>
+            <option>Drafts</option>
+          </select>
+          <select class="gs-home-select" id="statusFilter" aria-label="All statuses">
+            <option>All statuses</option>
+            <option>Draft</option>
+            <option>In progress</option>
+          </select>
+          <select class="gs-home-select" id="sortBy" aria-label="Sort by">
+            <option value="recent">Sort by · Recently edited</option>
+            <option value="name">Sort by · Name</option>
+            <option value="created">Sort by · Date created</option>
+          </select>
+          <label class="gs-home-search">
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="m20 20-3.5-3.5"/></svg>
+            <input id="searchInput" placeholder="Search projects..." autocomplete="off" />
+          </label>
+          <button type="button" class="gs-home-create" id="btnCreateProject">
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 5v14M5 12h14"/></svg>
+            <span>Create new project</span>
+          </button>
+        </div>
+        <div class="gs-home-grid" id="projGrid"></div>
+        <div class="gs-home-empty" id="homeEmpty" hidden>
+          <p>No projects yet.</p>
+          <button type="button" class="gs-home-create" id="btnCreateEmpty">
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 5v14M5 12h14"/></svg>
+            <span>Create new project</span>
+          </button>
+        </div>
+      </main>
+    </section>
+
     <div class="gs-app">
       <header class="gs-topbar">
-        <div class="gs-brand">
+        <button type="button" class="gs-icon-btn" id="btnHome" data-tip="All projects"></button>
+        <div class="gs-brand" id="brandRoot" data-tip="All projects">
           <span class="gs-brand__logo" id="brandLogo"></span>
           <span class="gs-brand__name">GrapesJS</span>
         </div>
@@ -69,8 +142,8 @@
       </div>
     </div>
 
-    <script src="node_modules/grapesjs/dist/grapes.min.js"></script>
-    <script src="node_modules/jszip/dist/jszip.min.js"></script>
+    <script src="vendor/grapes.min.js"></script>
+    <script src="vendor/jszip.min.js"></script>
     <script>
       (function () {
         'use strict';
@@ -103,6 +176,10 @@
             symbols: '<path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M18.178 8c5.096 0 5.096 8 0 8-5.095 0-7.133-8-12.739-8-4.585 0-4.585 8 0 8 5.606 0 7.644-8 12.74-8z"/>',
             settings: '<circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="1.8"/><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/>',
             palette: '<path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M12 22a10 10 0 1 1 10-10c0 1.66-1.34 3-3 3h-2.1a2.9 2.9 0 0 0-2.03 4.98A2.9 2.9 0 0 1 12 22Z"/><circle cx="7.5" cy="11.5" r="1" fill="currentColor"/><circle cx="11" cy="7.5" r="1" fill="currentColor"/><circle cx="16" cy="9.5" r="1" fill="currentColor"/>',
+            home: '<path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="m3 11 9-8 9 8"/><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M5 9.5V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.5"/><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M9 21v-6h6v6"/>',
+            globe: '<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9s1.3-6.4 3.8-9Z"/>',
+            global: '<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9s1.3-6.4 3.8-9Z"/>',
+            layout: '<rect x="3" y="3" width="18" height="18" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M3 9h18M9 21v-12"/>',
           };
           const d = paths[name] || '';
           return '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">' + d + '</svg>';
@@ -122,6 +199,7 @@
           '</svg>';
 
         document.getElementById('brandLogo').innerHTML = LOGO_SVG;
+        document.getElementById('homeLogo').innerHTML = LOGO_SVG;
 
         const el = (id) => document.getElementById(id);
         function esc(s) {
@@ -342,9 +420,9 @@
           width: 'auto',
           storageManager: {
             type: 'local',
-            autosave: true,
+            autosave: false,
             stepsBeforeSave: 1,
-            autoload: true,
+            autoload: false,
           },
           deviceManager: {
             devices: [
@@ -615,13 +693,28 @@
             const count = info.instances.length;
             const row = document.createElement('div');
             row.className = 'gs-page-item gs-symbol-item';
-            row.title = 'Click to insert an instance';
+            row.title = 'Drag to insert an instance';
+            row.draggable = true;
             row.innerHTML =
               '<span class="gs-symbol-name">' + icon('symbols') + '<span>' + esc(symbolLabel(main)) + '</span></span>' +
               '<span class="gs-page-actions">' +
               '<span class="gs-symbol-count">' + count + '</span>' +
               '<button type="button" class="gs-page-act gs-symbol-del" title="Remove symbol">' + icon('trash') + '</button>' +
               '</span>';
+            row.addEventListener('dragstart', (e) => {
+              e.stopPropagation();
+              e.dataTransfer.setData('text/plain', symbolLabel(main));
+              e.dataTransfer.effectAllowed = 'copy';
+              const temp = Symbols.addSymbol(main);
+              const content = temp.toJSON();
+              Symbols.detachSymbol(temp);
+              editor.getModel().set('dragSource', {
+                content: content,
+              });
+            });
+            row.addEventListener('dragend', () => {
+              editor.getModel().set({ dragResult: null, dragSource: undefined });
+            });
             row.addEventListener('click', (e) => {
               if (e.target.closest('.gs-symbol-del')) return;
               insertSymbolInstance(main);
@@ -1237,24 +1330,6 @@
         el('btnImport').addEventListener('click', importDialog);
         el('btnExport').addEventListener('click', exportDialog);
 
-        /* --- Save --- */
-        async function saveProject() {
-          try {
-            await editor.store();
-            showToast('Project saved');
-          } catch (err) {
-            console.error(err);
-            showToast('Could not save the project', 'error');
-          }
-        }
-        el('btnSave').addEventListener('click', saveProject);
-        document.addEventListener('keydown', (e) => {
-          if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
-            e.preventDefault();
-            saveProject();
-          }
-        });
-
         /* --- Publish (standalone preview) --- */
         function buildPageDoc(page) {
           const p = page || editor.Pages.getSelected();
@@ -1322,10 +1397,310 @@
         el('btnHelp').addEventListener('click', helpDialog);
 
         /* ------------------------------------------------------------------ */
+        /*  Multi-project home                                                 */
+        /* ------------------------------------------------------------------ */
+        const REG_KEY = 'grapeProjects';
+        const LEGACY_KEY = 'gjsProject';
+        let currentProjectId = null;
+        let defaultProjectData = null;
+        let saveTimer = null;
+
+        const projKey = (id) => 'grapeProject:' + id;
+        const readRegistry = () => {
+          try {
+            return JSON.parse(localStorage.getItem(REG_KEY) || '[]');
+          } catch (err) {
+            return [];
+          }
+        };
+        const writeRegistry = (list) => localStorage.setItem(REG_KEY, JSON.stringify(list));
+        const makeId = () => 'p' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+        const readProj = (id) => {
+          try {
+            return JSON.parse(localStorage.getItem(projKey(id)));
+          } catch (err) {
+            return null;
+          }
+        };
+        const writeProj = (id, data) => localStorage.setItem(projKey(id), JSON.stringify(data));
+        const removeProj = (id) => localStorage.removeItem(projKey(id));
+
+        function migrateLegacy() {
+          if (readRegistry().length) return;
+          const legacy = localStorage.getItem(LEGACY_KEY);
+          if (!legacy) return;
+          try {
+            const data = JSON.parse(legacy);
+            if (!data || !data.pages) return;
+            const id = makeId();
+            writeProj(id, data);
+            writeRegistry([{ id, name: 'My Website', createdAt: Date.now(), updatedAt: Date.now() }]);
+          } catch (err) {
+            console.error('Migration failed', err);
+          }
+        }
+
+        function persistCurrent() {
+          if (!currentProjectId) return false;
+          try {
+            writeProj(currentProjectId, editor.getProjectData());
+            const list = readRegistry();
+            const rec = list.find((r) => r.id === currentProjectId);
+            if (rec) {
+              rec.updatedAt = Date.now();
+              writeRegistry(list);
+            }
+            return true;
+          } catch (err) {
+            console.error('Could not save project', err);
+            return false;
+          }
+        }
+
+        function scheduleSave() {
+          clearTimeout(saveTimer);
+          saveTimer = setTimeout(persistCurrent, 600);
+        }
+
+        const AUTOSAVE_EVENTS =
+          'update component:update style:update trait:update page:add page:remove page:update ' +
+          'data:add data:update data:remove asset:add asset:remove ' +
+          'symbol:main:add symbol:main:remove symbol:main:update symbol:instance:add symbol:instance:remove';
+        AUTOSAVE_EVENTS.split(' ').forEach((ev) => editor.on(ev, scheduleSave));
+
+        async function saveProject() {
+          if (!currentProjectId) {
+            showToast('Open a project first', 'error');
+            return;
+          }
+          if (persistCurrent()) showToast('Project saved');
+          else showToast('Could not save the project', 'error');
+        }
+        el('btnSave').addEventListener('click', saveProject);
+        document.addEventListener('keydown', (e) => {
+          if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+            e.preventDefault();
+            saveProject();
+          }
+        });
+
+        function timeAgo(ts) {
+          const s = Math.floor((Date.now() - ts) / 1000);
+          if (s < 60) return 'just now';
+          const m = Math.floor(s / 60);
+          if (m < 60) return m + 'm ago';
+          const h = Math.floor(m / 60);
+          if (h < 24) return h + 'h ago';
+          const d = Math.floor(h / 24);
+          if (d < 7) return d + 'd ago';
+          return new Date(ts).toLocaleDateString();
+        }
+
+        function cardHTML(rec) {
+          return (
+            '<div class="gs-home-card" data-id="' + esc(rec.id) + '">' +
+            '<div class="gs-home-prev">' +
+            '<span class="gs-home-prev__inner">' + icon('layout') + '</span>' +
+            '<div class="gs-home-prev__open"><button type="button" class="gs-home-prev__open--btn">Open</button></div>' +
+            '</div>' +
+            '<div class="gs-home-card__body">' +
+            '<div class="gs-home-card__row1">' +
+            '<span class="gs-home-card__name" title="' + esc(rec.name) + '">' + esc(rec.name) + '</span>' +
+            '<span class="gs-home-card__acts">' +
+            '<button type="button" class="gs-home-card__act" data-act="rename" title="Rename">' + icon('pencil') + '</button>' +
+            '<button type="button" class="gs-home-card__act" data-act="delete" title="Delete">' + icon('trash') + '</button>' +
+            '</span>' +
+            '</div>' +
+            '<div class="gs-home-card__row2">' +
+            '<span class="gs-home-card__lang">' + icon('globe') + ' English</span>' +
+            '<span>Edited ' + timeAgo(rec.updatedAt || rec.createdAt) + '</span>' +
+            '</div>' +
+            '</div>' +
+            '</div>'
+          );
+        }
+
+        function renderHome() {
+          const q = el('searchInput').value.trim().toLowerCase();
+          const sort = el('sortBy').value;
+          let list = readRegistry().filter((r) => !q || (r.name || '').toLowerCase().includes(q));
+          if (sort === 'name') list.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+          else if (sort === 'created') list.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+          else list.sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+          el('projCount').textContent = list.length + (list.length === 1 ? ' project' : ' projects');
+          el('projGrid').innerHTML = list.map(cardHTML).join('');
+          el('homeEmpty').toggleAttribute('hidden', list.length > 0);
+        }
+
+        function showHome() {
+          renderHome();
+          el('home').classList.toggle('gs-hidden', false);
+        }
+
+        function showApp() {
+          el('home').classList.add('gs-hidden');
+        }
+
+        function goHome() {
+          persistCurrent();
+          showHome();
+        }
+
+        function openProject(id) {
+          const data = readProj(id);
+          if (!data) {
+            showToast('Could not load that project', 'error');
+            return;
+          }
+          currentProjectId = id;
+          try {
+            editor.loadProjectData(data);
+          } catch (err) {
+            console.error('loadProjectData failed', err);
+          }
+          renderPages();
+          updateProjectName();
+          syncRail();
+          if (symbolsOpen) renderSymbols();
+          if (variablesOpen) renderVariables();
+          setTimeout(syncVarRules, 0);
+          showApp();
+        }
+
+        function createProject(name) {
+          const clean = (name || '').trim() || 'My Website';
+          const id = makeId();
+          if (!defaultProjectData) defaultProjectData = editor.getProjectData();
+          writeProj(id, JSON.parse(JSON.stringify(defaultProjectData)));
+          const list = readRegistry();
+          list.unshift({ id, name: clean, createdAt: Date.now(), updatedAt: Date.now() });
+          writeRegistry(list);
+          openProject(id);
+          showToast('Project «' + clean + '» created');
+        }
+
+        function createDialog() {
+          openModal({
+            title: 'Create new project',
+            bodyHTML:
+              '<label class="gs-field-label">Project name</label>' +
+              '<input id="newProjName" class="gs-field-input" type="text" placeholder="My Website" value="My Website" />',
+            actions: [
+              { label: 'Cancel', variant: 'ghost', onClick: closeModal },
+              {
+                label: 'Create',
+                variant: 'primary',
+                onClick: () => {
+                  createProject(document.getElementById('newProjName').value);
+                  closeModal();
+                },
+              },
+            ],
+          });
+          setTimeout(() => {
+            const inp = document.getElementById('newProjName');
+            if (inp) {
+              inp.focus();
+              inp.select();
+            }
+          }, 0);
+        }
+
+        const renameDialog = (id) => {
+          const rec = readRegistry().find((r) => r.id === id);
+          if (!rec) return;
+          openModal({
+            title: 'Rename project',
+            bodyHTML:
+              '<label class="gs-field-label">Project name</label>' +
+              '<input id="newProjName" class="gs-field-input" type="text" placeholder="My Website" />',
+            actions: [
+              { label: 'Cancel', variant: 'ghost', onClick: closeModal },
+              {
+                label: 'Rename',
+                variant: 'primary',
+                onClick: () => {
+                  const v = document.getElementById('newProjName').value.trim();
+                  if (!v) return;
+                  const list = readRegistry();
+                  const r = list.find((x) => x.id === id);
+                  if (r) {
+                    r.name = v;
+                    writeRegistry(list);
+                    renderHome();
+                  }
+                  closeModal();
+                },
+              },
+            ],
+          });
+          setTimeout(() => {
+            const inp = document.getElementById('newProjName');
+            if (inp) {
+              inp.value = rec.name;
+              inp.focus();
+              inp.select();
+            }
+          }, 0);
+        };
+
+        const deleteDialog = (id) => {
+          const rec = readRegistry().find((r) => r.id === id);
+          if (!rec) return;
+          openModal({
+            title: 'Delete project?',
+            bodyHTML:
+              '<p class="gs-modal-hint">«' +
+              esc(rec.name) +
+              '» and all of its pages and data will be permanently removed from this browser.</p>',
+            actions: [
+              { label: 'Cancel', variant: 'ghost', onClick: closeModal },
+              {
+                label: 'Delete',
+                variant: 'primary',
+                onClick: () => {
+                  removeProj(id);
+                  writeRegistry(readRegistry().filter((r) => r.id !== id));
+                  if (currentProjectId === id) {
+                    currentProjectId = null;
+                    showHome();
+                  } else {
+                    renderHome();
+                  }
+                  closeModal();
+                },
+              },
+            ],
+          });
+        };
+
+        el('projGrid').addEventListener('click', (e) => {
+          const card = e.target.closest('.gs-home-card');
+          if (!card) return;
+          const id = card.dataset.id;
+          const actEl = e.target.closest('[data-act]');
+          if (actEl) {
+            if (actEl.dataset.act === 'delete') deleteDialog(id);
+            else if (actEl.dataset.act === 'rename') renameDialog(id);
+          } else {
+            openProject(id);
+          }
+        });
+
+        el('btnHome').addEventListener('click', goHome);
+        el('brandRoot').addEventListener('click', goHome);
+        el('btnCreateProject').addEventListener('click', createDialog);
+        el('btnCreateEmpty').addEventListener('click', createDialog);
+        el('searchInput').addEventListener('input', renderHome);
+        el('sortBy').addEventListener('change', renderHome);
+        el('statusFilter').addEventListener('change', renderHome);
+
+        /* ------------------------------------------------------------------ */
         /*  Init                                                               */
         /* ------------------------------------------------------------------ */
         function initIcons() {
           const map = {
+            btnHome: 'home',
             btnUndo: 'undo',
             btnRedo: 'redo',
             btnPreview: 'preview',
@@ -1351,12 +1726,16 @@
         syncRail();
 
         editor.on('load', () => {
+          if (!defaultProjectData) defaultProjectData = editor.getProjectData();
           openPages();
           editor.runCommand('core:open-blocks');
           updateProjectName();
           syncRail();
           setTimeout(syncVarRules, 0);
         });
+
+        migrateLegacy();
+        showHome();
 
         window.editor = editor;
       })();
