@@ -1571,6 +1571,49 @@
           showApp();
         }
 
+        /* --- Website cloning --- */
+        async function fetchPageHtml(rawUrl) {
+          const url = rawUrl.trim();
+          const proxies = [
+            (u) => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u),
+            (u) => 'https://api.codetabs.com/v1/proxy/?quest=' + encodeURIComponent(u),
+          ];
+          let text = null;
+          for (const build of proxies) {
+            try {
+              const res = await fetch(build(url));
+              if (!res.ok) continue;
+              text = await res.text();
+              if (text) break;
+            } catch (_) {}
+          }
+          if (!text) throw new Error('Could not fetch the page (CORS proxy failed)');
+          return text;
+        }
+
+        function stripJsFromHtml(html) {
+          return html
+            .replace(/<script\b[\s\S]*?<\/script>/gi, '')
+            .replace(/<script\b[^>]*\/>/gi, '')
+            .replace(/\son[a-z]+\s*=\s*["'][^"']*["']/gi, '');
+        }
+
+        async function createProjectWithClone(name, cloneUrl) {
+          const clean = (name || '').trim() || 'My Website';
+          const id = makeId();
+          if (!defaultProjectData) defaultProjectData = editor.getProjectData();
+          writeProj(id, JSON.parse(JSON.stringify(defaultProjectData)));
+          const list = readRegistry();
+          list.unshift({ id, name: clean, createdAt: Date.now(), updatedAt: Date.now() });
+          writeRegistry(list);
+          openProject(id);
+          const html = await fetchPageHtml(cloneUrl);
+          const safe = stripJsFromHtml(html);
+          editor.setComponents(safe);
+          persistCurrent();
+          showToast('Cloned into «' + clean + '»');
+        }
+
         function createProject(name) {
           const clean = (name || '').trim() || 'My Website';
           const id = makeId();
@@ -1588,15 +1631,35 @@
             title: 'Create new project',
             bodyHTML:
               '<label class="gs-field-label">Project name</label>' +
-              '<input id="newProjName" class="gs-field-input" type="text" placeholder="My Website" value="My Website" />',
+              '<input id="newProjName" class="gs-field-input" type="text" placeholder="My Website" value="My Website" />' +
+              '<div class="gs-field-sep"></div>' +
+              '<label class="gs-field-label">Clone from a website (optional)</label>' +
+              '<input id="cloneUrl" class="gs-field-input" type="url" placeholder="https://example.com" />' +
+              '<p class="gs-clone-warn">You must have the licence or permission to reuse the content of any site you clone. ' +
+              'Only static HTML pages can be cloned — JavaScript-driven (SPA) sites will not import correctly.</p>',
             actions: [
               { label: 'Cancel', variant: 'ghost', onClick: closeModal },
               {
                 label: 'Create',
                 variant: 'primary',
-                onClick: () => {
-                  createProject(document.getElementById('newProjName').value);
-                  closeModal();
+                onClick: async () => {
+                  const btn = document.querySelector('.gs-btn--primary');
+                  const cloneUrl = document.getElementById('cloneUrl').value.trim();
+                  try {
+                    if (cloneUrl) {
+                      btn.disabled = true;
+                      btn.textContent = 'Cloning…';
+                      await createProjectWithClone(document.getElementById('newProjName').value, cloneUrl);
+                    } else {
+                      createProject(document.getElementById('newProjName').value);
+                    }
+                    closeModal();
+                  } catch (err) {
+                    console.error(err);
+                    showToast('Could not clone that page: ' + (err.message || 'unknown error'), 'error');
+                    btn.disabled = false;
+                    btn.textContent = 'Create';
+                  }
                 },
               },
             ],
