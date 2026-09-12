@@ -68,6 +68,10 @@
             <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 5v14M5 12h14"/></svg>
             <span>Create new project</span>
           </button>
+          <button type="button" class="gs-home-import" id="btnImportProject">
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M12 3v11m0 0 4-4m-4 4-4-4"/><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M4 19h16"/></svg>
+            <span>Import project</span>
+          </button>
         </div>
         <div class="gs-home-grid" id="projGrid"></div>
         <div class="gs-home-empty" id="homeEmpty" hidden>
@@ -75,6 +79,10 @@
           <button type="button" class="gs-home-create" id="btnCreateEmpty">
             <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 5v14M5 12h14"/></svg>
             <span>Create new project</span>
+          </button>
+          <button type="button" class="gs-home-import" id="btnImportEmpty">
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M12 3v11m0 0 4-4m-4 4-4-4"/><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M4 19h16"/></svg>
+            <span>Import project</span>
           </button>
         </div>
       </main>
@@ -101,7 +109,6 @@
         <button type="button" class="gs-icon-btn" id="btnPreview" data-tip="Preview"></button>
         <button type="button" class="gs-icon-btn" id="btnFullscreen" data-tip="Fullscreen"></button>
         <div class="gs-sep"></div>
-        <button type="button" class="gs-icon-btn" id="btnImport" data-tip="Import code"></button>
         <button type="button" class="gs-icon-btn" id="btnExport" data-tip="Export code"></button>
         <button type="button" class="gs-save-btn" id="btnSave">Save</button>
       </header>
@@ -1247,87 +1254,84 @@
           });
         }
 
-        async function doImportZipFile(file) {
-          try {
-            const zip = await JSZip.loadAsync(file);
-            const allFiles = Object.keys(zip.files).filter((n) => !zip.files[n].dir);
-            const projectFile = allFiles.find((n) => n.toLowerCase().endsWith('.grapesjs') || n.toLowerCase().endsWith('.gjs') || n.toLowerCase().endsWith('.json'));
-            if (projectFile) {
-              const text = await zip.files[projectFile].async('string');
-              const data = JSON.parse(text);
-              editor.loadProjectData(data);
-              renderPages();
-              updateProjectName();
-              if (symbolsOpen) renderSymbols();
-              if (variablesOpen) renderVariables();
-              closeModal();
-              showToast('Project imported from ' + projectFile);
-              return;
-            }
-            const names = allFiles.filter((n) => n.toLowerCase().endsWith('.html'));
-            if (!names.length) {
-              showToast('No importable file found in the archive', 'error');
-              return;
-            }
-            const preferred = names.find((n) => n.toLowerCase().endsWith('index.html')) || names[0];
-            const html = await zip.files[preferred].async('string');
-            editor.setComponents(html);
-            closeModal();
-            showToast('Imported from ' + preferred);
-          } catch (err) {
-            console.error(err);
-            showToast('Could not read that archive', 'error');
-          }
-        }
-
-        async function doImportProjectFile(file) {
-          const text = await file.text();
-          const data = JSON.parse(text);
-          editor.loadProjectData(data);
-          renderPages();
-          updateProjectName();
-          if (symbolsOpen) renderSymbols();
-          if (variablesOpen) renderVariables();
-          closeModal();
-          showToast('Project imported from ' + file.name);
-        }
-
-        async function doImport(input) {
-          const file = input.files && input.files[0];
+        async function homeImportFile(file) {
           if (!file) {
             showToast('Choose a file first', 'error');
             return;
           }
-          const lower = file.name.toLowerCase();
+          const lower = (file.name || '').toLowerCase();
+          const base =
+            (file.name || 'Imported project').replace(/\.[a-z0-9]+$/i, '').trim() || 'Imported project';
+          let data = null;
+          let html = null;
           try {
-            if (lower.endsWith('.zip')) await doImportZipFile(file);
-            else if (lower.endsWith('.grapesjs') || lower.endsWith('.gjs') || lower.endsWith('.json')) await doImportProjectFile(file);
-            else showToast('Choose a .grapesjs (project), .json (project) or .zip (website) file', 'error');
+            if (lower.endsWith('.zip')) {
+              const zip = await JSZip.loadAsync(file);
+              const allFiles = Object.keys(zip.files).filter((n) => !zip.files[n].dir);
+              const projectFile = allFiles.find((n) => n.toLowerCase().endsWith('.grapesjs') || n.toLowerCase().endsWith('.gjs') || n.toLowerCase().endsWith('.json'));
+              if (projectFile) {
+                data = JSON.parse(await zip.files[projectFile].async('string'));
+              } else {
+                const names = allFiles.filter((n) => n.toLowerCase().endsWith('.html'));
+                if (!names.length) {
+                  showToast('No importable file found in the archive', 'error');
+                  return;
+                }
+                const preferred = names.find((n) => n.toLowerCase().endsWith('index.html')) || names[0];
+                html = await zip.files[preferred].async('string');
+              }
+            } else if (lower.endsWith('.grapesjs') || lower.endsWith('.gjs') || lower.endsWith('.json')) {
+              data = JSON.parse(await file.text());
+            } else {
+              showToast('Choose a .grapesjs (project), .json (project) or .zip (website) file', 'error');
+              return;
+            }
           } catch (err) {
             console.error(err);
             showToast('Could not read that file', 'error');
+            return;
           }
+          const id = makeId();
+          let projData;
+          if (data) {
+            projData = data;
+          } else {
+            if (!defaultProjectData) defaultProjectData = editor.getProjectData();
+            projData = JSON.parse(JSON.stringify(defaultProjectData));
+          }
+          writeProj(id, projData);
+          const list = readRegistry();
+          list.unshift({ id, name: base, createdAt: Date.now(), updatedAt: Date.now() });
+          writeRegistry(list);
+          openProject(id);
+          if (html) {
+            editor.setComponents(html);
+            persistCurrent();
+          }
+          closeModal();
+          showToast('Project «' + base + '» imported from ' + file.name);
         }
 
-        function importDialog() {
+        function homeImportDialog() {
           const input = document.createElement('input');
           input.type = 'file';
           input.accept = '.grapesjs,.gjs,.json,.zip,application/json,application/zip';
           input.className = 'gs-file';
           openModal({
-            title: 'Import',
+            title: 'Import project',
             bodyHTML:
               '<p class="gs-modal-hint"><b>Project file (.grapesjs / .json)</b> — loads a full GrapeSite project: every page, symbol, asset and style.</p>' +
-              '<p class="gs-modal-hint"><b>Website (.zip)</b> — replaces the current page with the <b>index.html</b> from the exported site.</p>',
+              '<p class="gs-modal-hint"><b>Website (.zip)</b> — creates a new project from the exported site (or the <b>index.html</b> it contains).</p>',
             actions: [
               { label: 'Cancel', variant: 'ghost', onClick: closeModal },
-              { label: 'Import', variant: 'primary', onClick: () => doImport(input) },
+              { label: 'Import', variant: 'primary', onClick: () => homeImportFile(input.files && input.files[0]) },
             ],
           });
           el('modalBody').appendChild(input);
         }
 
-        el('btnImport').addEventListener('click', importDialog);
+        el('btnImportProject').addEventListener('click', homeImportDialog);
+        el('btnImportEmpty').addEventListener('click', homeImportDialog);
         el('btnExport').addEventListener('click', exportDialog);
 
         /* --- Publish (standalone preview) --- */
@@ -1386,7 +1390,7 @@
               '<li><b>Styles</b> — style the selected element (selectors, layout, typography…).</li>' +
               '<li><b>Properties</b> — edit traits of the selected element.</li>' +
               '<li><b>Assets</b> — manage images and upload new ones.</li>' +
-              '<li><b>Import</b> — load a saved project (.json: every page, symbol, asset and style) or a website .zip (index.html replaces the current page).</li>' +
+              '<li><b>Import</b> — on the Projects screen, import a saved project (.json: every page, symbol, asset and style) or a website .zip as a new project.</li>' +
               '<li><b>Export</b> — download the project as a .json file, or the whole site as a self-contained .zip (index.html plus one file per page, with HTML, CSS and JS).</li>' +
               '<li>Your project is saved automatically in the browser (<b>Ctrl/Cmd+S</b> to save now).</li>' +
               '</ul>' +
@@ -1705,7 +1709,6 @@
             btnRedo: 'redo',
             btnPreview: 'preview',
             btnFullscreen: 'fullscreen',
-            btnImport: 'import',
             btnExport: 'export',
             btnSave: 'save',
             btnPublish: 'rocket',

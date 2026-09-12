@@ -1090,6 +1090,28 @@ html, body {
 }
 .gs-home-create:hover { background: #8f62ff; }
 
+.gs-home-import {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 16px;
+  border: 1px solid #3a3b40;
+  border-radius: 9px;
+  background: transparent;
+  color: #c4c4cc;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.gs-home-import:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: #4a4b52;
+  color: #f4f4f5;
+}
+
 .gs-home-grid {
   display: grid;
   gap: 16px;
