@@ -773,6 +773,368 @@
               '<div style="max-width:1080px;margin:24px auto 0;padding-top:20px;border-top:1px solid #27272a;font-size:12.5px;color:#71717a">© 2026 Your Company. All rights reserved.</div>' +
               '</footer>',
           },
+          {
+            id: 'footer-minimal',
+            label: 'Footer (minimal)',
+            category: 'Footer',
+            content:
+              '<footer style="border-top:1px solid #e5e7eb;padding:20px 24px;font-size:13px;color:#71717a">' +
+              '<div style="max-width:1080px;margin:0 auto;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center">' +
+              '<span><b style="color:#18181b">GrapeSite</b> © 2026</span>' +
+              '<span style="display:flex;gap:16px"><a href="#" style="color:#71717a;text-decoration:none">Privacy</a><a href="#" style="color:#71717a;text-decoration:none">Terms</a><a href="#" style="color:#71717a;text-decoration:none">Contact</a></span>' +
+              '</div></footer>',
+          },
+          {
+            id: 'footer-newsletter',
+            label: 'Footer with newsletter',
+            category: 'Footer',
+            content:
+              '<footer style="background:#18181b;color:#d4d4d8;padding:48px 24px">' +
+              '<div style="max-width:1080px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;gap:28px;align-items:center">' +
+              '<div style="flex:1 1 260px"><div style="font-size:18px;font-weight:800"><span style="color:#a78bfa">Grape</span><span style="color:#fff">Site</span></div>' +
+              '<p style="margin:8px 0 0;font-size:13.5px;color:#a1a1aa;max-width:280px">Subscribe to the newsletter for product updates and tips.</p></div>' +
+              '<form style="display:flex;gap:8px;flex:1 1 300px;max-width:360px">' +
+              '<input type="email" placeholder="you@email.com" style="flex:1;padding:10px 14px;border:1px solid #3f3f46;border-radius:9px;background:#27272a;color:#fff;font-size:14px" />' +
+              '<span style="background:#7d4bff;color:#fff;padding:10px 18px;border-radius:9px;font-weight:600;cursor:pointer;white-space:nowrap">Subscribe</span>' +
+              '</form></div></footer>',
+          },
+          /* --- Navbar extras --- */
+          {
+            id: 'navbar-dark',
+            label: 'Navbar (dark)',
+            category: 'Navbar',
+            content:
+              '<nav style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px;padding:14px 24px;background:#18181b">' +
+              '<div style="font-weight:800;font-size:18px"><span style="color:#a78bfa">Logo</span></div>' +
+              '<div style="display:flex;flex-wrap:wrap;gap:20px;font-size:14px">' +
+              '<a href="#" style="color:#fff;text-decoration:none;font-weight:600">Home</a>' +
+              '<a href="#" style="color:#a1a1aa;text-decoration:none">Features</a>' +
+              '<a href="#" style="color:#a1a1aa;text-decoration:none">Pricing</a>' +
+              '<a href="#" style="color:#a1a1aa;text-decoration:none">Docs</a>' +
+              '</div>' +
+              '<span style="background:#7d4bff;color:#fff;padding:8px 18px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer">Get started</span>' +
+              '</nav>',
+          },
+          {
+            id: 'navbar-search',
+            label: 'Navbar with search',
+            category: 'Navbar',
+            content:
+              '<nav style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px;padding:12px 24px;border-bottom:1px solid #e5e7eb">' +
+              '<div style="font-weight:800;font-size:18px"><span style="color:#7d4bff">Logo</span></div>' +
+              '<form style="display:flex;gap:6px;flex:1 1 220px;max-width:320px">' +
+              '<input type="search" placeholder="Search…" style="flex:1;padding:8px 12px;border:1px solid #e5e7eb;border-radius:8px;font-size:13px" />' +
+              '<span style="background:#7d4bff;color:#fff;padding:8px 14px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer">Go</span>' +
+              '</form>' +
+              '<div style="display:flex;flex-wrap:wrap;gap:18px;font-size:14px">' +
+              '<a href="#" style="color:#18181b;text-decoration:none;font-weight:600">Home</a>' +
+              '<a href="#" style="color:#555;text-decoration:none">About</a>' +
+              '<a href="#" style="color:#555;text-decoration:none">Contact</a>' +
+              '</div></nav>',
+          },
+          {
+            id: 'breadcrumbs',
+            label: 'Breadcrumbs',
+            category: 'Navbar',
+            content:
+              '<nav style="font-size:13px;padding:8px 24px;color:#71717a">' +
+              '<a href="#" style="color:#7d4bff;text-decoration:none">Home</a> <span style="margin:0 6px;color:#a1a1aa">/</span> ' +
+              '<a href="#" style="color:#71717a;text-decoration:none">Products</a> <span style="margin:0 6px;color:#a1a1aa">/</span> ' +
+              '<span style="color:#18181b;font-weight:600">Current page</span>' +
+              '</nav>',
+          },
+          /* --- Buttons extras --- */
+          {
+            id: 'btn-icon-arrow',
+            label: 'Button with arrow',
+            category: 'Buttons',
+            content:
+              '<a href="#" style="display:inline-flex;align-items:center;gap:8px;background:#7d4bff;color:#fff;padding:12px 24px;border-radius:10px;font-weight:600;text-decoration:none">Get started <span style="font-size:16px">→</span></a>',
+          },
+          {
+            id: 'btn-group',
+            label: 'Button group',
+            category: 'Buttons',
+            content:
+              '<div style="display:inline-flex;border-radius:10px;overflow:hidden;border:1.5px solid #7d4bff">' +
+              '<span style="background:#7d4bff;color:#fff;padding:10px 20px;font-weight:600;cursor:pointer">Sign up</span>' +
+              '<span style="background:#fff;color:#7d4bff;padding:10px 20px;font-weight:600;cursor:pointer">Log in</span>' +
+              '</div>',
+          },
+          {
+            id: 'btn-pill',
+            label: 'Pill button',
+            category: 'Buttons',
+            content:
+              '<span style="display:inline-block;background:#7d4bff;color:#fff;padding:9px 22px;border-radius:999px;font-weight:600;cursor:pointer">Pill action</span>',
+          },
+          /* --- Badges & misc text --- */
+          {
+            id: 'eyebrow',
+            label: 'Eyebrow + heading',
+            category: 'Text',
+            content:
+              '<div><span style="display:inline-block;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#7d4bff">Eyebrow label</span>' +
+              '<h2 style="font-size:30px;font-weight:800;line-height:1.15;margin:8px 0 0">A strong headline that<br/>grabs attention</h2></div>',
+          },
+          {
+            id: 'badge',
+            label: 'Badge / pill',
+            category: 'Text',
+            content:
+              '<span style="display:inline-block;background:#f1ecff;color:#6d28d9;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:600">New feature</span>',
+          },
+          {
+            id: 'pull-quote',
+            label: 'Pull quote',
+            category: 'Text',
+            content:
+              '<figure style="max-width:560px;margin:24px auto;text-align:center">' +
+              '<blockquote style="border:none;margin:0;padding:0;font-size:26px;font-weight:700;line-height:1.35;color:#18181b">“The best way to predict the future is to invent it.”</blockquote>' +
+              '<figcaption style="margin-top:12px;font-size:14px;color:#71717a">— Alan Kay</figcaption>' +
+              '</figure>',
+          },
+          {
+            id: 'code-block',
+            label: 'Code block',
+            category: 'Text',
+            content:
+              '<pre style="background:#18181b;color:#e4e4e7;padding:16px 18px;border-radius:10px;overflow:auto;font-size:13px;line-height:1.6"><code>function hello() {\n  console.log("Hello world");\n}</code></pre>',
+          },
+          /* --- Media extras --- */
+          {
+            id: 'avatar',
+            label: 'Avatar',
+            category: 'Media',
+            content:
+              '<img src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'120\' height=\'120\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23d8d4ff\'/%3E%3Ctext x=\'50%25\' y=\'56%25\' font-family=\'Arial,sans-serif\' font-size=\'40\' fill=\'%237d4bff\' text-anchor=\'middle\'%3E%3C/text%3E%3C/svg%3E" style="width:72px;height:72px;border-radius:50%;object-fit:cover" alt="Avatar" />',
+          },
+          {
+            id: 'logo-cloud',
+            label: 'Logo cloud',
+            category: 'Media',
+            content:
+              '<div style="display:flex;flex-wrap:wrap;gap:28px;align-items:center;justify-content:center;padding:16px 0;opacity:.75">' +
+              '<b style="color:#71717a;font-size:20px">Acme</b>' +
+              '<b style="color:#71717a;font-style:italic;font-size:20px">Globex</b>' +
+              '<b style="color:#71717a;font-size:20px">Initech</b>' +
+              '<b style="color:#71717a;font-weight:700;font-size:20px">Umbrella</b>' +
+              '<b style="color:#71717a;font-size:20px">Stark</b>' +
+              '</div>',
+          },
+          {
+            id: 'icon-grid',
+            label: 'Icon row (3)',
+            category: 'Media',
+            content:
+              '<div style="display:flex;flex-wrap:wrap;gap:24px;justify-content:center;padding:16px 0">' +
+              '<div style="text-align:center;flex:1 1 120px"><div style="width:56px;height:56px;margin:0 auto;border-radius:14px;background:#f1ecff;display:flex;align-items:center;justify-content:center;color:#7d4bff;font-size:24px">⚡</div><div style="font-size:12.5px;color:#555;margin-top:8px">Fast</div></div>' +
+              '<div style="text-align:center;flex:1 1 120px"><div style="width:56px;height:56px;margin:0 auto;border-radius:14px;background:#ecfdf5;display:flex;align-items:center;justify-content:center;color:#059669;font-size:24px">✅</div><div style="font-size:12.5px;color:#555;margin-top:8px">Simple</div></div>' +
+              '<div style="text-align:center;flex:1 1 120px"><div style="width:56px;height:56px;margin:0 auto;border-radius:14px;background:#eff6ff;display:flex;align-items:center;justify-content:center;color:#2563eb;font-size:24px">🔒</div><div style="font-size:12.5px;color:#555;margin-top:8px">Secure</div></div>' +
+              '</div>',
+          },
+          /* --- Cards extras --- */
+          {
+            id: 'team-member',
+            label: 'Team member',
+            category: 'Cards',
+            content:
+              '<figure style="max-width:240px;margin:0 auto;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:20px;text-align:center">' +
+              '<img src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'120\' height=\'120\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23e9e9ee\'/%3E%3C/svg%3E" style="width:80px;height:80px;border-radius:50%;object-fit:cover" alt="Avatar" />' +
+              '<figcaption><b style="font-size:15px;color:#18181b;display:block;margin-top:10px">Jane Doe</b>' +
+              '<span style="font-size:12.5px;color:#7d4bff;font-weight:600">Chief Designer</span>' +
+              '<span style="display:block;font-size:12.5px;color:#71717a;margin-top:8px">Designs delightful interfaces.</span></figcaption>' +
+              '</figure>',
+          },
+          {
+            id: 'alert',
+            label: 'Alert / notice',
+            category: 'Cards',
+            content:
+              '<div style="display:flex;gap:12px;align-items:flex-start;background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:14px 16px;color:#1e40af;font-size:14px;line-height:1.55">' +
+              '<span style="font-size:18px;line-height:1">ℹ️</span><span><b>Heads up:</b> This is an informational notice you can restyle.</span>' +
+              '</div>',
+          },
+          {
+            id: 'blog-card',
+            label: 'Blog post card',
+            category: 'Cards',
+            content:
+              '<article style="max-width:340px;margin:0 auto;background:#fff;border:1px solid #e5e7eb;border-radius:14px;overflow:hidden">' +
+              '<img src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'640\' height=\'320\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23f1ecff\'/%3E%3C/svg%3E" style="width:100%;display:block" />' +
+              '<div style="padding:18px 20px">' +
+              '<span style="font-size:11.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#7d4bff">Design</span>' +
+              '<h3 style="margin:6px 0;font-size:17px;font-weight:700;line-height:1.35">How we redesigned our landing page in a weekend</h3>' +
+              '<p style="margin:0;font-size:13px;color:#71717a">Two-minute read · June 2026</p>' +
+              '</div></article>',
+          },
+          {
+            id: 'price-comparison',
+            label: 'Price table',
+            category: 'Cards',
+            content:
+              '<div style="display:flex;flex-wrap:wrap;gap:16px;justify-content:center;padding:16px 0">' +
+              '<div style="flex:1 1 200px;border:1px solid #e5e7eb;border-radius:14px;padding:20px;text-align:center"><div style="font-size:13px;font-weight:700;color:#71717a">Basic</div><div style="font-size:28px;font-weight:800;margin:6px 0">$9<span style="font-size:13px;color:#71717a">/mo</span></div><div style="font-size:12.5px;color:#71717a">For individuals</div></div>' +
+              '<div style="flex:1 1 200px;border:2px solid #7d4bff;border-radius:14px;padding:20px;text-align:center;box-shadow:0 8px 26px rgba(125,75,255,.15)"><div style="font-size:13px;font-weight:700;color:#7d4bff">Pro</div><div style="font-size:28px;font-weight:800;margin:6px 0">$29<span style="font-size:13px;color:#71717a">/mo</span></div><div style="font-size:12.5px;color:#71717a">Recommended</div></div>' +
+              '<div style="flex:1 1 200px;border:1px solid #e5e7eb;border-radius:14px;padding:20px;text-align:center"><div style="font-size:13px;font-weight:700;color:#71717a">Team</div><div style="font-size:28px;font-weight:800;margin:6px 0">$79<span style="font-size:13px;color:#71717a">/mo</span></div><div style="font-size:12.5px;color:#71717a">For businesses</div></div>' +
+              '</div>',
+          },
+          /* --- Forms extras --- */
+          {
+            id: 'newsletter',
+            label: 'Newsletter band',
+            category: 'Forms',
+            content:
+              '<section style="text-align:center;padding:48px 24px;background:linear-gradient(135deg,#f1ecff,transparent 70%)">' +
+              '<h2 style="margin:0 0 8px;font-size:26px;font-weight:800">Stay in the loop</h2>' +
+              '<p style="margin:0 0 20px;color:#555;font-size:15px">Get product updates, no spam.</p>' +
+              '<form style="display:flex;gap:8px;max-width:420px;margin:0 auto;flex-wrap:wrap;justify-content:center">' +
+              '<input type="email" placeholder="you@email.com" style="flex:1 1 220px;padding:11px 14px;border:1px solid #e5e7eb;border-radius:9px;font-size:14px" />' +
+              '<span style="background:#7d4bff;color:#fff;padding:11px 22px;border-radius:9px;font-weight:600;cursor:pointer">Subscribe</span>' +
+              '</form></section>',
+          },
+          {
+            id: 'field-select',
+            label: 'Select dropdown',
+            category: 'Forms',
+            content:
+              '<label style="display:block;font-size:13px;font-weight:600;color:#3f3f46;margin-bottom:6px">Choose an option</label>' +
+              '<select style="width:100%;max-width:320px;padding:11px 14px;border:1px solid #e5e7eb;border-radius:9px;background:#fff;font-size:14px"><option>Option one</option><option>Option two</option><option>Option three</option></select>',
+          },
+          {
+            id: 'field-checkbox',
+            label: 'Checkbox list',
+            category: 'Forms',
+            content:
+              '<div style="display:flex;flex-direction:column;gap:8px;font-size:14px;color:#3f3f46">' +
+              '<label style="display:flex;align-items:center;gap:8px"><input type="checkbox" style="width:16px;height:16px;accent-color:#7d4bff" /> Email me the newsletter</label>' +
+              '<label style="display:flex;align-items:center;gap:8px"><input type="checkbox" style="width:16px;height:16px;accent-color:#7d4bff" /> Opt in to product updates</label>' +
+              '</div>',
+          },
+          {
+            id: 'field-radio',
+            label: 'Radio group',
+            category: 'Forms',
+            content:
+              '<div style="display:flex;flex-direction:column;gap:8px;font-size:14px;color:#3f3f46">' +
+              '<label style="display:flex;align-items:center;gap:8px"><input type="radio" name="plan" style="width:16px;height:16px;accent-color:#7d4bff" /> Monthly billing</label>' +
+              '<label style="display:flex;align-items:center;gap:8px"><input type="radio" name="plan" style="width:16px;height:16px;accent-color:#7d4bff" /> Annual billing</label>' +
+              '</div>',
+          },
+          {
+            id: 'table',
+            label: 'Table',
+            category: 'Structure',
+            content:
+              '<div style="max-width:640px;overflow-x:auto;border:1px solid #e5e7eb;border-radius:12px">' +
+              '<table style="width:100%;border-collapse:collapse;font-size:14px"><thead>' +
+              '<tr style="background:#fafafa;color:#18181b"><th style="padding:10px 14px;text-align:left;font-weight:700">Plan</th><th style="padding:10px 14px;text-align:left;font-weight:700">Price</th><th style="padding:10px 14px;text-align:left;font-weight:700">Limit</th></tr>' +
+              '</thead><tbody>' +
+              '<tr style="border-top:1px solid #e5e7eb"><td style="padding:10px 14px">Free</td><td style="padding:10px 14px">$0</td><td style="padding:10px 14px">1 site</td></tr>' +
+              '<tr style="border-top:1px solid #e5e7eb"><td style="padding:10px 14px">Pro</td><td style="padding:10px 14px">$29</td><td style="padding:10px 14px">10 sites</td></tr>' +
+              '</tbody></table></div>',
+          },
+          {
+            id: 'gallery-2x2',
+            label: 'Image grid (2×2)',
+            category: 'Structure',
+            content:
+              '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;padding:16px 0">' +
+              '<img src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'320\' height=\'320\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23f1ecff\'/%3E%3C/svg%3E" style="width:100%;border-radius:10px;aspect-ratio:1;object-fit:cover;display:block" />' +
+              '<img src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'320\' height=\'320\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23e9e9ee\'/%3E%3C/svg%3E" style="width:100%;border-radius:10px;aspect-ratio:1;object-fit:cover;display:block" />' +
+              '<img src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'320\' height=\'320\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23e9e9ee\'/%3E%3C/svg%3E" style="width:100%;border-radius:10px;aspect-ratio:1;object-fit:cover;display:block" />' +
+              '<img src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'320\' height=\'320\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23f1ecff\'/%3E%3C/svg%3E" style="width:100%;border-radius:10px;aspect-ratio:1;object-fit:cover;display:block" />' +
+              '</div>',
+          },
+          {
+            id: 'sidebar-layout',
+            label: 'Content + sidebar',
+            category: 'Structure',
+            content:
+              '<div style="display:flex;flex-wrap:wrap;gap:24px;padding:16px 0;align-items:flex-start">' +
+              '<div style="flex:1 1 280px;min-height:140px;background:#fafafa;border:1px dashed #e5e7eb;border-radius:10px;padding:14px">Main content area</div>' +
+              '<aside style="flex:0 1 260px;background:#fafafa;border:1px dashed #e5e7eb;border-radius:10px;padding:14px;min-height:140px">Sidebar widgets</aside>' +
+              '</div>',
+          },
+          {
+            id: 'col-4',
+            label: 'Four columns',
+            category: 'Structure',
+            content:
+              '<div style="display:flex;flex-wrap:wrap;gap:16px;padding:16px 0">' +
+              '<div style="flex:1 1 140px;min-height:70px;background:#fafafa;border:1px dashed #e5e7eb;border-radius:10px;padding:10px">One</div>' +
+              '<div style="flex:1 1 140px;min-height:70px;background:#fafafa;border:1px dashed #e5e7eb;border-radius:10px;padding:10px">Two</div>' +
+              '<div style="flex:1 1 140px;min-height:70px;background:#fafafa;border:1px dashed #e5e7eb;border-radius:10px;padding:10px">Three</div>' +
+              '<div style="flex:1 1 140px;min-height:70px;background:#fafafa;border:1px dashed #e5e7eb;border-radius:10px;padding:10px">Four</div>' +
+              '</div>',
+          },
+          /* --- Sections extras --- */
+          {
+            id: 'contact-section',
+            label: 'Contact section',
+            category: 'Sections',
+            content:
+              '<section style="display:flex;flex-wrap:wrap;gap:32px;max-width:1080px;margin:0 auto;padding:48px 24px">' +
+              '<div style="flex:1 1 260px"><h2 style="margin:0 0 8px;font-size:28px;font-weight:800">Get in touch</h2>' +
+              '<p style="margin:0 0 16px;color:#555">We typically reply within a day.</p>' +
+              '<div style="font-size:14px;color:#3f3f46;line-height:2"><div><b>Email</b><br/>hello@example.com</div><div style="margin-top:8px"><b>Phone</b><br/>+1 (555) 000-0000</div></div></div>' +
+              '<form style="flex:1 1 320px;display:flex;flex-direction:column;gap:12px">' +
+              '<input placeholder="Name" style="padding:11px 14px;border:1px solid #e5e7eb;border-radius:9px;font-size:14px" />' +
+              '<input type="email" placeholder="Email" style="padding:11px 14px;border:1px solid #e5e7eb;border-radius:9px;font-size:14px" />' +
+              '<textarea placeholder="Message" rows="4" style="padding:11px 14px;border:1px solid #e5e7eb;border-radius:9px;font-size:14px;resize:vertical"></textarea>' +
+              '<span style="align-self:flex-start;background:#7d4bff;color:#fff;padding:10px 22px;border-radius:9px;font-weight:600;cursor:pointer">Send</span>' +
+              '</form></section>',
+          },
+          {
+            id: 'faq',
+            label: 'FAQ list',
+            category: 'Sections',
+            content:
+              '<section style="max-width:720px;margin:0 auto;padding:48px 24px">' +
+              '<h2 style="margin:0 0 20px;font-size:28px;font-weight:800;text-align:center">Frequently asked questions</h2>' +
+              '<div style="border-top:1px solid #e5e7eb">' +
+              '<details style="border-bottom:1px solid #e5e7eb;padding:14px 4px"><summary style="font-weight:600;cursor:pointer;font-size:15px">How do I publish my site?</summary><p style="margin:10px 0 0;color:#52525b;font-size:14px">Use the Publish button in the top bar to deploy to Neocities.</p></details>' +
+              '<details style="border-bottom:1px solid #e5e7eb;padding:14px 4px"><summary style="font-weight:600;cursor:pointer;font-size:15px">Can I export my code?</summary><p style="margin:10px 0 0;color:#52525b;font-size:14px">Yes — use Export to download a ZIP or project JSON.</p></details>' +
+              '<details style="border-bottom:1px solid #e5e7eb;padding:14px 4px"><summary style="font-weight:600;cursor:pointer;font-size:15px">How many pages can I have?</summary><p style="margin:10px 0 0;color:#52525b;font-size:14px">As many as you like — add pages from the Pages panel.</p></details>' +
+              '</div></section>',
+          },
+          {
+            id: 'team-grid',
+            label: 'Team grid',
+            category: 'Sections',
+            content:
+              '<section style="max-width:1080px;margin:0 auto;padding:48px 24px">' +
+              '<h2 style="margin:0 0 24px;font-size:26px;font-weight:800;text-align:center">Meet the team</h2>' +
+              '<div style="display:flex;flex-wrap:wrap;gap:18px">' +
+              '<figure style="flex:1 1 160px;margin:0;background:#fafafa;border:1px solid #e5e7eb;border-radius:12px;padding:16px;text-align:center"><div style="font-size:34px">🧑‍💻</div><figcaption style="font-size:13.5px;margin-top:8px"><b>Alex</b><br/><span style="color:#71717a">Engineer</span></figcaption></figure>' +
+              '<figure style="flex:1 1 160px;margin:0;background:#fafafa;border:1px solid #e5e7eb;border-radius:12px;padding:16px;text-align:center"><div style="font-size:34px">👩‍🎨</div><figcaption style="font-size:13.5px;margin-top:8px"><b>Sam</b><br/><span style="color:#71717a">Designer</span></figcaption></figure>' +
+              '<figure style="flex:1 1 160px;margin:0;background:#fafafa;border:1px solid #e5e7eb;border-radius:12px;padding:16px;text-align:center"><div style="font-size:34px">👨‍💼</div><figcaption style="font-size:13.5px;margin-top:8px"><b>Jordan</b><br/><span style="color:#71717a">Product</span></figcaption></figure>' +
+              '</div></section>',
+          },
+          {
+            id: 'stats-banner',
+            label: 'Stats banner',
+            category: 'Sections',
+            content:
+              '<section style="background:#18181b;color:#fff;padding:40px 24px;display:flex;flex-wrap:wrap;gap:24px;justify-content:space-around;text-align:center">' +
+              '<div><div style="font-size:36px;font-weight:800;color:#a78bfa">2M+</div><div style="font-size:13px;color:#a1a1aa">Visitors / month</div></div>' +
+              '<div><div style="font-size:36px;font-weight:800;color:#a78bfa">98%</div><div style="font-size:13px;color:#a1a1aa">Satisfaction</div></div>' +
+              '<div><div style="font-size:36px;font-weight:800;color:#a78bfa">150+</div><div style="font-size:13px;color:#a1a1aa">Countries served</div></div>' +
+              '</section>',
+          },
+          {
+            id: 'blog-posts',
+            label: 'Blog posts row',
+            category: 'Sections',
+            content:
+              '<section style="max-width:1080px;margin:0 auto;padding:48px 24px">' +
+              '<h2 style="margin:0 0 24px;font-size:26px;font-weight:800">Latest posts</h2>' +
+              '<div style="display:flex;flex-wrap:wrap;gap:18px">' +
+              '<article style="flex:1 1 220px;border:1px solid #e5e7eb;border-radius:14px;padding:18px"><div style="font-size:11.5px;font-weight:700;color:#7d4bff;text-transform:uppercase">Guides</div><h3 style="font-size:15px;margin:8px 0;line-height:1.4">Building your first page</h3><span style="font-size:12.5px;color:#71717a">5 min read</span></article>' +
+              '<article style="flex:1 1 220px;border:1px solid #e5e7eb;border-radius:14px;padding:18px"><div style="font-size:11.5px;font-weight:700;color:#7d4bff;text-transform:uppercase">Tips</div><h3 style="font-size:15px;margin:8px 0;line-height:1.4">Designing for mobile first</h3><span style="font-size:12.5px;color:#71717a">7 min read</span></article>' +
+              '<article style="flex:1 1 220px;border:1px solid #e5e7eb;border-radius:14px;padding:18px"><div style="font-size:11.5px;font-weight:700;color:#7d4bff;text-transform:uppercase">News</div><h3 style="font-size:15px;margin:8px 0;line-height:1.4">Ship faster with GrapeSite</h3><span style="font-size:12.5px;color:#71717a">3 min read</span></article>' +
+              '</div></section>',
+          },
         ];
 
         /* ------------------------------------------------------------------ */
