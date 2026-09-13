@@ -119,7 +119,6 @@
           <button type="button" class="gs-rail-btn" data-side="pages" data-tip="Pages"></button>
           <button type="button" class="gs-rail-btn" data-side="symbols" data-tip="Symbols"></button>
           <div class="gs-rail-grow"></div>
-          <button type="button" class="gs-rail-btn" id="btnPublish" data-tip="Publish preview"></button>
           <button type="button" class="gs-rail-btn" id="btnHelp" data-tip="Help"></button>
         </nav>
         <aside class="gs-left-panel" id="leftPanel"></aside>
@@ -1419,20 +1418,6 @@
           );
         }
 
-        function publishDialog() {
-          const page = editor.Pages.getSelected();
-          const name = page ? page.getName() : 'Untitled';
-          const doc = buildPageDoc();
-          openModal({
-            title: 'Publish preview',
-            bodyHTML:
-              '<p class="gs-modal-hint">A preview of "' + esc(name) + '" as a standalone page. Deploy this HTML anywhere.</p>' +
-              '<iframe class="gs-preview" sandbox="allow-scripts" srcdoc="' + esc(doc) + '"></iframe>',
-            actions: [{ label: 'Close', variant: 'ghost', onClick: closeModal }],
-          });
-        }
-        el('btnPublish').addEventListener('click', publishDialog);
-
         /* ------------------------------------------------------------------ */
         /*  Neocities publish                                                  */
         /* ------------------------------------------------------------------ */
@@ -1928,7 +1913,6 @@
             btnFullscreen: 'fullscreen',
             btnExport: 'export',
             btnSave: 'save',
-            btnPublish: 'rocket',
             btnHelp: 'help',
           };
           Object.entries(map).forEach(([id, name]) => {

@@ -896,14 +896,6 @@ html, body {
   cursor: pointer;
 }
 
-.gs-preview {
-  width: 100%;
-  height: 460px;
-  border: 1px solid #34353a;
-  border-radius: 10px;
-  background: #fff;
-}
-
 .gs-help { margin: 0 0 14px; padding-left: 18px; font-size: 13.5px; line-height: 1.9; color: #c9c9cf; }
 .gs-help-link { color: #b79bff; font-size: 13px; text-decoration: none; }
 .gs-help-link:hover { text-decoration: underline; }
