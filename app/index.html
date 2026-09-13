@@ -455,6 +455,324 @@
               '</div>' +
               '</section>',
           },
+          /* --- Navbar --- */
+          {
+            id: 'navbar',
+            label: 'Navbar (responsive)',
+            category: 'Navbar',
+            content:
+              '<nav style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px;padding:14px 24px;border-bottom:1px solid #e5e7eb">' +
+              '<div style="font-weight:800;font-size:18px"><span style="color:#7d4bff">Logo</span></div>' +
+              '<div style="display:flex;flex-wrap:wrap;gap:20px;font-size:14px">' +
+              '<a href="#" style="color:#18181b;text-decoration:none;font-weight:600">Home</a>' +
+              '<a href="#" style="color:#555;text-decoration:none">About</a>' +
+              '<a href="#" style="color:#555;text-decoration:none">Services</a>' +
+              '<a href="#" style="color:#555;text-decoration:none">Contact</a>' +
+              '</div>' +
+              '<a href="#" style="background:#7d4bff;color:#fff;padding:8px 18px;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600">Sign up</a>' +
+              '</nav>',
+          },
+          {
+            id: 'navbar-simple',
+            label: 'Navbar (simple)',
+            category: 'Navbar',
+            content:
+              '<nav style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px;padding:14px 24px;border-bottom:1px solid #e5e7eb">' +
+              '<div style="font-weight:800;font-size:18px"><span style="color:#7d4bff">Logo</span></div>' +
+              '<div style="display:flex;flex-wrap:wrap;gap:20px;font-size:14px">' +
+              '<a href="#" style="color:#18181b;text-decoration:none;font-weight:600">Home</a>' +
+              '<a href="#" style="color:#555;text-decoration:none">About</a>' +
+              '<a href="#" style="color:#555;text-decoration:none">Contact</a>' +
+              '</div>' +
+              '</nav>',
+          },
+          /* --- Buttons --- */
+          {
+            id: 'btn-primary',
+            label: 'Button (primary)',
+            category: 'Buttons',
+            content:
+              '<a href="#" style="display:inline-block;background:#7d4bff;color:#fff;padding:12px 24px;border-radius:10px;font-weight:600;text-decoration:none">Primary action</a>',
+          },
+          {
+            id: 'btn-outline',
+            label: 'Button (outline)',
+            category: 'Buttons',
+            content:
+              '<a href="#" style="display:inline-block;border:1.5px solid #7d4bff;color:#7d4bff;padding:11px 23px;border-radius:10px;font-weight:600;text-decoration:none">Outline action</a>',
+          },
+          {
+            id: 'btn-dark',
+            label: 'Button (dark)',
+            category: 'Buttons',
+            content:
+              '<a href="#" style="display:inline-block;background:#18181b;color:#fff;padding:12px 24px;border-radius:10px;font-weight:600;text-decoration:none">Dark action</a>',
+          },
+          {
+            id: 'btn-light',
+            label: 'Button (light)',
+            category: 'Buttons',
+            content:
+              '<span style="display:inline-block;background:#fff;border:1px solid #e5e7eb;color:#18181b;padding:12px 24px;border-radius:10px;font-weight:600;cursor:pointer">Light action</span>',
+          },
+          {
+            id: 'btn-small',
+            label: 'Button (small)',
+            category: 'Buttons',
+            content:
+              '<span style="display:inline-block;background:#7d4bff;color:#fff;padding:6px 14px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer">Small action</span>',
+          },
+          /* --- Links --- */
+          {
+            id: 'text-link',
+            label: 'Text link',
+            category: 'Links',
+            content:
+              '<p style="margin:0"><a href="#" style="color:#7d4bff;text-decoration:none;font-weight:600">Learn more →</a></p>',
+          },
+          {
+            id: 'muted-link',
+            label: 'Muted link',
+            category: 'Links',
+            content:
+              '<p style="margin:0"><a href="#" style="color:#71717a;text-decoration:underline;text-underline-offset:2px">Terms &amp; conditions</a></p>',
+          },
+          {
+            id: 'social-links',
+            label: 'Social links',
+            category: 'Links',
+            content:
+              '<div style="display:flex;gap:10px">' +
+              '<span title="X" style="width:34px;height:34px;border-radius:50%;background:#18181b;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;cursor:pointer">𝕏</span>' +
+              '<span title="GitHub" style="width:34px;height:34px;border-radius:50%;background:#24292f;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;cursor:pointer">⌥</span>' +
+              '<span title="LinkedIn" style="width:34px;height:34px;border-radius:50%;background:#0a66c2;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;cursor:pointer">in</span>' +
+              '</div>',
+          },
+          /* --- Text --- */
+          {
+            id: 'heading',
+            label: 'Heading',
+            category: 'Text',
+            content:
+              '<h2 style="font-size:28px;font-weight:800;line-height:1.15;margin:0 0 10px">A clean heading</h2>',
+          },
+          {
+            id: 'paragraph',
+            label: 'Paragraph',
+            category: 'Text',
+            content:
+              '<p style="font-size:16px;color:#52525b;line-height:1.65;margin:0 0 12px">This is a paragraph of body text. Select it to edit the content and style.</p>',
+          },
+          {
+            id: 'blockquote',
+            label: 'Blockquote',
+            category: 'Text',
+            content:
+              '<blockquote style="border-left:4px solid #7d4bff;margin:16px 0;padding:4px 0 4px 16px;color:#3f3f46;font-style:italic;font-size:17px">“Design is not just what it looks like and feels like. Design is how it works.”</blockquote>',
+          },
+          {
+            id: 'list',
+            label: 'List',
+            category: 'Text',
+            content:
+              '<ul style="margin:0;padding-left:20px;color:#52525b;line-height:1.7">' +
+              '<li>First item</li><li>Second item</li><li>Third item</li></ul>',
+          },
+          {
+            id: 'checklist',
+            label: 'Checklist',
+            category: 'Text',
+            content:
+              '<ul style="list-style:none;margin:0;padding:0;color:#52525b;line-height:1.9">' +
+              '<li style="display:flex;gap:8px"><span style="color:#7d4bff;font-weight:700">✓</span><span>Feature one is included</span></li>' +
+              '<li style="display:flex;gap:8px"><span style="color:#7d4bff;font-weight:700">✓</span><span>Feature two is included</span></li>' +
+              '<li style="display:flex;gap:8px"><span style="color:#7d4bff;font-weight:700">✓</span><span>Feature three is included</span></li>' +
+              '</ul>',
+          },
+          {
+            id: 'divider',
+            label: 'Divider',
+            category: 'Text',
+            content: '<hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0" />',
+          },
+          {
+            id: 'spacer',
+            label: 'Spacer',
+            category: 'Text',
+            content: '<div style="height:32px" aria-hidden="true"></div>',
+          },
+          /* --- Media --- */
+          {
+            id: 'image',
+            label: 'Image',
+            category: 'Media',
+            content:
+              '<img src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'640\' height=\'360\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23e9e9ee\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' font-family=\'Arial,sans-serif\' font-size=\'24\' fill=\'%23888\' text-anchor=\'middle\' dy=\'.3em\'%3EImage%3C/text%3E%3C/svg%3E" style="max-width:100%;height:auto;display:block;border-radius:10px" />',
+          },
+          {
+            id: 'image-caption',
+            label: 'Image with caption',
+            category: 'Media',
+            content:
+              '<figure style="margin:0">' +
+              '<img src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'640\' height=\'360\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23e9e9ee\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' font-family=\'Arial,sans-serif\' font-size=\'24\' fill=\'%23888\' text-anchor=\'middle\' dy=\'.3em\'%3EImage%3C/text%3E%3C/svg%3E" style="max-width:100%;height:auto;display:block;border-radius:10px" />' +
+              '<figcaption style="font-size:13px;color:#71717a;margin-top:6px">Figure caption text</figcaption>' +
+              '</figure>',
+          },
+          {
+            id: 'video',
+            label: 'Video (16:9)',
+            category: 'Media',
+            content:
+              '<div style="position:relative;width:100%;aspect-ratio:16/9;border-radius:10px;overflow:hidden;background:#000">' +
+              '<iframe src="https://www.youtube.com/embed/ScMzIvxBSi4" title="Video" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>' +
+              '</div>',
+          },
+          {
+            id: 'map',
+            label: 'Map embed',
+            category: 'Media',
+            content:
+              '<div style="position:relative;width:100%;border-radius:10px;overflow:hidden;border:1px solid #e5e7eb">' +
+              '<iframe src="https://maps.google.com/maps?q=San%20Francisco&t=&z=13&ie=UTF8&iwloc=&output=embed" style="width:100%;height:340px;border:0" loading="lazy" title="Map"></iframe>' +
+              '</div>',
+          },
+          {
+            id: 'embed',
+            label: 'Embed (widget)',
+            category: 'Media',
+            content:
+              '<div style="position:relative;width:100%;background:#f4f4f5;border:1.5px dashed #cbd5e1;border-radius:10px;padding:64px 24px;text-align:center;color:#71717a;font-size:14px">' +
+              'Embed your widget here —<br/>paste an <b>iframe</b> or script snippet.' +
+              '</div>',
+          },
+          /* --- Cards --- */
+          {
+            id: 'card',
+            label: 'Card',
+            category: 'Cards',
+            content:
+              '<div style="max-width:340px;margin:0 auto;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:24px;box-shadow:0 6px 24px rgba(0,0,0,.05)">' +
+              '<div style="width:44px;height:44px;border-radius:10px;background:#f1ecff;display:flex;align-items:center;justify-content:center;font-size:20px;color:#7d4bff">✦</div>' +
+              '<h3 style="margin:14px 0 6px;font-size:17px;font-weight:700">Card title</h3>' +
+              '<p style="margin:0;font-size:13.5px;color:#71717a;line-height:1.6">A short description of this card’s content goes here.</p>' +
+              '</div>',
+          },
+          {
+            id: 'image-card',
+            label: 'Image card',
+            category: 'Cards',
+            content:
+              '<div style="max-width:340px;margin:0 auto;background:#fff;border:1px solid #e5e7eb;border-radius:14px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.05)">' +
+              '<img src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'640\' height=\'360\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23e9e9ee\'/%3E%3C/svg%3E" style="width:100%;display:block" />' +
+              '<div style="padding:18px 20px"><h3 style="margin:0 0 6px;font-size:16px;font-weight:700">Image card title</h3>' +
+              '<p style="margin:0;font-size:13.5px;color:#71717a;line-height:1.6">Supporting text for this image card.</p></div>' +
+              '</div>',
+          },
+          {
+            id: 'testimonial',
+            label: 'Testimonial',
+            category: 'Cards',
+            content:
+              '<figure style="max-width:420px;margin:0 auto;background:#fafafa;border:1px solid #e5e7eb;border-radius:14px;padding:22px">' +
+              '<div style="font-size:18px;color:#7d4bff">★★★★★</div>' +
+              '<blockquote style="border:none;margin:10px 0;padding:0;color:#3f3f46;font-size:14.5px;line-height:1.6;font-style:italic">“This tool completely changed how we ship marketing pages.”</blockquote>' +
+              '<figcaption style="font-size:13px;color:#71717a"><b style="color:#18181b">Jane Doe</b> — Product Manager, Acme</figcaption>' +
+              '</figure>',
+          },
+          {
+            id: 'stats',
+            label: 'Stats row',
+            category: 'Cards',
+            content:
+              '<div style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;padding:24px">' +
+              '<div style="text-align:center"><div style="font-size:34px;font-weight:800;color:#7d4bff">12k</div><div style="font-size:13px;color:#71717a">Customers</div></div>' +
+              '<div style="text-align:center"><div style="font-size:34px;font-weight:800;color:#7d4bff">99%</div><div style="font-size:13px;color:#71717a">Uptime</div></div>' +
+              '<div style="text-align:center"><div style="font-size:34px;font-weight:800;color:#7d4bff">4.9</div><div style="font-size:13px;color:#71717a">Rating</div></div>' +
+              '</div>',
+          },
+          /* --- Forms --- */
+          {
+            id: 'contact-form',
+            label: 'Contact form',
+            category: 'Forms',
+            content:
+              '<form style="max-width:420px;margin:0 auto;display:flex;flex-direction:column;gap:12px">' +
+              '<input type="text" placeholder="Your name" style="padding:11px 14px;border:1px solid #e5e7eb;border-radius:9px;font-size:14px" />' +
+              '<input type="email" placeholder="Your email" style="padding:11px 14px;border:1px solid #e5e7eb;border-radius:9px;font-size:14px" />' +
+              '<textarea placeholder="Your message" rows="4" style="padding:11px 14px;border:1px solid #e5e7eb;border-radius:9px;font-size:14px;resize:vertical"></textarea>' +
+              '<span style="align-self:flex-start;background:#7d4bff;color:#fff;padding:10px 22px;border-radius:9px;font-weight:600;cursor:pointer">Send message</span>' +
+              '</form>',
+          },
+          {
+            id: 'form-search',
+            label: 'Search field',
+            category: 'Forms',
+            content:
+              '<form style="display:flex;gap:8px;max-width:420px">' +
+              '<input type="search" placeholder="Search…" style="flex:1;padding:10px 14px;border:1px solid #e5e7eb;border-radius:9px;font-size:14px" />' +
+              '<span style="background:#18181b;color:#fff;padding:10px 18px;border-radius:9px;font-weight:600;cursor:pointer">Go</span>' +
+              '</form>',
+          },
+          /* --- Structure --- */
+          {
+            id: 'row-2',
+            label: 'Two columns',
+            category: 'Structure',
+            content:
+              '<div style="display:flex;flex-wrap:wrap;gap:20px;padding:16px 0">' +
+              '<div style="flex:1 1 220px;min-height:80px;background:#fafafa;border:1px dashed #e5e7eb;border-radius:10px;padding:12px">Column one</div>' +
+              '<div style="flex:1 1 220px;min-height:80px;background:#fafafa;border:1px dashed #e5e7eb;border-radius:10px;padding:12px">Column two</div>' +
+              '</div>',
+          },
+          {
+            id: 'row-3',
+            label: 'Three columns',
+            category: 'Structure',
+            content:
+              '<div style="display:flex;flex-wrap:wrap;gap:20px;padding:16px 0">' +
+              '<div style="flex:1 1 200px;min-height:80px;background:#fafafa;border:1px dashed #e5e7eb;border-radius:10px;padding:12px">One</div>' +
+              '<div style="flex:1 1 200px;min-height:80px;background:#fafafa;border:1px dashed #e5e7eb;border-radius:10px;padding:12px">Two</div>' +
+              '<div style="flex:1 1 200px;min-height:80px;background:#fafafa;border:1px dashed #e5e7eb;border-radius:10px;padding:12px">Three</div>' +
+              '</div>',
+          },
+          {
+            id: 'split-image-text',
+            label: 'Image + text split',
+            category: 'Structure',
+            content:
+              '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:24px;padding:24px 0">' +
+              '<div style="flex:1 1 280px"><img src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'640\' height=\'360\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23e9e9ee\'/%3E%3C/svg%3E" style="width:100%;border-radius:12px;display:block" /></div>' +
+              '<div style="flex:1 1 280px"><h3 style="margin:0 0 8px;font-size:22px;font-weight:800">Tell your story here</h3>' +
+              '<p style="margin:0;color:#52525b;line-height:1.65">Describe the benefit with supporting copy, then lead the visitor to a call to action.</p>' +
+              '<span style="display:inline-block;margin-top:14px;background:#7d4bff;color:#fff;padding:10px 20px;border-radius:9px;font-weight:600;cursor:pointer">Learn more</span></div>' +
+              '</div>',
+          },
+          {
+            id: 'container',
+            label: 'Container',
+            category: 'Structure',
+            content:
+              '<div style="max-width:1080px;margin:0 auto;padding:0 24px"><p style="color:#71717a;font-size:14px">Drop content inside this centered container.</p></div>',
+          },
+          /* --- Footer --- */
+          {
+            id: 'footer',
+            label: 'Footer',
+            category: 'Footer',
+            content:
+              '<footer style="background:#18181b;color:#d4d4d8;padding:40px 24px;margin-top:48px">' +
+              '<div style="max-width:1080px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px">' +
+              '<div style="flex:1 1 220px"><div style="font-weight:800;font-size:18px"><span style="color:#a78bfa">Grape</span><span style="color:#fff">Site</span></div>' +
+              '<p style="margin:10px 0 0;font-size:13.5px;color:#a1a1aa;max-width:260px">Short description about your brand and what you do.</p></div>' +
+              '<div style="font-size:14px"><div style="font-weight:700;color:#fff;margin-bottom:8px">Product</div>' +
+              '<div style="display:flex;flex-direction:column;gap:6px;color:#a1a1aa"><a href="#" style="color:inherit;text-decoration:none">Features</a><a href="#" style="color:inherit;text-decoration:none">Pricing</a><a href="#" style="color:inherit;text-decoration:none">Changelog</a></div></div>' +
+              '<div style="font-size:14px"><div style="font-weight:700;color:#fff;margin-bottom:8px">Company</div>' +
+              '<div style="display:flex;flex-direction:column;gap:6px;color:#a1a1aa"><a href="#" style="color:inherit;text-decoration:none">About</a><a href="#" style="color:inherit;text-decoration:none">Blog</a><a href="#" style="color:inherit;text-decoration:none">Contact</a></div></div>' +
+              '</div>' +
+              '<div style="max-width:1080px;margin:24px auto 0;padding-top:20px;border-top:1px solid #27272a;font-size:12.5px;color:#71717a">© 2026 Your Company. All rights reserved.</div>' +
+              '</footer>',
+          },
         ];
 
         /* ------------------------------------------------------------------ */
@@ -523,6 +841,10 @@
             category: block.category,
             content: block.content,
           });
+        });
+        ['Sections', 'Navbar', 'Buttons', 'Links', 'Text', 'Media', 'Cards', 'Forms', 'Structure', 'Footer'].forEach((cid) => {
+          const cat = editor.Blocks.getCategories().find((c) => c.get('id') === cid);
+          if (cat) cat.set('open', true);
         });
 
         window.gjsEditor = editor;
