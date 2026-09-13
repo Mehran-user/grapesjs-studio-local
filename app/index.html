@@ -110,6 +110,7 @@
         <button type="button" class="gs-icon-btn" id="btnFullscreen" data-tip="Fullscreen"></button>
         <div class="gs-sep"></div>
         <button type="button" class="gs-icon-btn" id="btnExport" data-tip="Export code"></button>
+        <button type="button" class="gs-publish-btn" id="btnPublishSite" data-tip="Publish to Neocities">Publish</button>
         <button type="button" class="gs-save-btn" id="btnSave">Save</button>
       </header>
 
@@ -118,7 +119,7 @@
           <button type="button" class="gs-rail-btn" data-side="pages" data-tip="Pages"></button>
           <button type="button" class="gs-rail-btn" data-side="symbols" data-tip="Symbols"></button>
           <div class="gs-rail-grow"></div>
-          <button type="button" class="gs-rail-btn" id="btnPublish" data-tip="Publish"></button>
+          <button type="button" class="gs-rail-btn" id="btnPublish" data-tip="Publish preview"></button>
           <button type="button" class="gs-rail-btn" id="btnHelp" data-tip="Help"></button>
         </nav>
         <aside class="gs-left-panel" id="leftPanel"></aside>
@@ -1432,6 +1433,164 @@
         }
         el('btnPublish').addEventListener('click', publishDialog);
 
+        /* ------------------------------------------------------------------ */
+        /*  Neocities publish                                                  */
+        /* ------------------------------------------------------------------ */
+        const NC_USER_KEY = 'grapeNeocitiesUser';
+        const NC_KEY_KEY = 'grapeNeocitiesKey';
+        const NC_LAST_KEY = 'grapeNeocitiesLastPublish';
+        const NC_MIN_INTERVAL = 60000;
+
+        function ncSaveCreds(user, key) {
+          localStorage.setItem(NC_USER_KEY, user);
+          localStorage.setItem(NC_KEY_KEY, key);
+        }
+        function ncClearCreds() {
+          localStorage.removeItem(NC_USER_KEY);
+          localStorage.removeItem(NC_KEY_KEY);
+        }
+        function ncCooldownLeft() {
+          const last = +(localStorage.getItem(NC_LAST_KEY) || 0);
+          return last + NC_MIN_INTERVAL - Date.now();
+        }
+
+        function ncSiteFiles() {
+          const pages = editor.Pages.getAll();
+          const files = [];
+          const used = new Set();
+          pages.forEach((page, i) => {
+            let base = i === 0 ? 'index' : slug(page.getName());
+            if (i > 0 && !base) base = 'page-' + (i + 1);
+            let fname = base + '.html';
+            let n = 2;
+            while (used.has(fname)) fname = base + '-' + (n++) + '.html';
+            used.add(fname);
+            files.push({ name: fname, content: buildPageDoc(page) });
+          });
+          return files;
+        }
+
+        async function ncUpload(user, key, files) {
+          const form = new FormData();
+          files.forEach((f) => form.append('file[]', new Blob([f.content], { type: 'text/html' }), f.name));
+          const res = await fetch('https://neocities.org/api/upload', {
+            method: 'POST',
+            headers: { Authorization: 'Basic ' + btoa(user + ':' + key) },
+            body: form,
+          });
+          return res.json();
+        }
+
+        function ncSaveFromForm() {
+          const user = document.getElementById('ncUser').value.trim();
+          const key = document.getElementById('ncKey').value.trim();
+          if (user && key) {
+            ncSaveCreds(user, key);
+            showToast('Neocities credentials saved');
+            return true;
+          }
+          showToast('Enter your Neocities username and API key', 'error');
+          return false;
+        }
+
+        async function ncPublishFromDialog() {
+          const user = document.getElementById('ncUser').value.trim();
+          const key = document.getElementById('ncKey').value.trim();
+          if (!user || !key) {
+            showToast('Enter your Neocities username and API key', 'error');
+            return;
+          }
+          const left = ncCooldownLeft();
+          if (left > 0) {
+            showToast('Please wait ' + Math.ceil(left / 1000) + 's before publishing again (Neocities: 1 update/minute)', 'error');
+            return;
+          }
+          const files = ncSiteFiles();
+          if (!files.length) {
+            showToast('No pages to publish', 'error');
+            return;
+          }
+          const btn = document.querySelector('.gs-btn--primary');
+          btn.disabled = true;
+          btn.textContent = 'Publishing…';
+          try {
+            showProgress('Publishing to Neocities…');
+            const json = await ncUpload(user, key, files);
+            hideProgress();
+            if (json && json.result === 'success') {
+              localStorage.setItem(NC_LAST_KEY, String(Date.now()));
+              ncSaveCreds(user, key);
+              closeModal();
+              showToast(
+                'Published ' + files.length + ' file' + (files.length === 1 ? '' : 's') +
+                ' to https://' + user + '.neocities.org/'
+              );
+            } else {
+              const msg = (json && json.message) ? json.message : 'Neocities rejected the upload';
+              showToast('Publish failed: ' + msg, 'error');
+              btn.disabled = false;
+              btn.textContent = 'Publish';
+            }
+          } catch (err) {
+            hideProgress();
+            console.error(err);
+            showToast('Could not connect to Neocities: ' + (err.message || 'network error'), 'error');
+            btn.disabled = false;
+            btn.textContent = 'Publish';
+          }
+        }
+
+        function neocitiesDialog() {
+          const user = localStorage.getItem(NC_USER_KEY) || '';
+          const hasCreds = !!(user && localStorage.getItem(NC_KEY_KEY));
+          const left = ncCooldownLeft();
+          openModal({
+            title: 'Publish to Neocities',
+            bodyHTML:
+              '<p class="gs-modal-hint">Neocities hosts your static site for free. ' +
+              'Generate an API key from your dashboard (neocities.org → Settings → API).</p>' +
+              (hasCreds
+                ? '<div class="gs-nc-connected">Connected as <b>' + esc(user) + '</b> — ' +
+                  'site: <a href="https://' + esc(user) + '.neocities.org/" target="_blank" rel="noopener">' +
+                  'https://' + esc(user) + '.neocities.org/</a></div>'
+                : '') +
+              '<label class="gs-field-label">Neocities username</label>' +
+              '<input id="ncUser" class="gs-field-input" type="text" placeholder="myusername" autocomplete="username" value="' + esc(user) + '" />' +
+              '<label class="gs-field-label">API key</label>' +
+              '<input id="ncKey" class="gs-field-input" type="password" placeholder="••••••••••••••••" autocomplete="current-password"' +
+              (hasCreds ? ' value="' + esc(localStorage.getItem(NC_KEY_KEY)) + '"' : '') + ' />' +
+              '<p class="gs-modal-hint gs-nc-note">' +
+              (left > 0
+                ? 'Rate limit: you can publish again in ' + Math.ceil(left / 1000) + 's.'
+                : 'Neocities limits recurring updates to one per minute.') +
+              '</p>',
+            actions: [
+              { label: 'Cancel', variant: 'ghost', onClick: closeModal },
+              ...(hasCreds
+                ? [{
+                    label: 'Disconnect',
+                    variant: 'ghost',
+                    onClick: () => {
+                      ncClearCreds();
+                      closeModal();
+                      showToast('Neocities credentials cleared');
+                    },
+                  }]
+                : []),
+              {
+                label: 'Save credentials',
+                variant: 'ghost',
+                onClick: () => {
+                  ncSaveFromForm();
+                  neocitiesDialog();
+                },
+              },
+              { label: 'Publish', variant: 'primary', onClick: ncPublishFromDialog },
+            ],
+          });
+        }
+        el('btnPublishSite').addEventListener('click', neocitiesDialog);
+
         /* --- Help --- */
         function helpDialog() {
           openModal({
@@ -1782,6 +1941,7 @@
         initIcons();
 
         el('btnSave').innerHTML = icon24('save') + '<span>Save</span>';
+        el('btnPublishSite').innerHTML = icon24('rocket') + '<span>Publish</span>';
 
         updateProjectName();
         syncRail();
