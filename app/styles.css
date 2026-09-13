@@ -575,6 +575,24 @@ html, body {
 .gjs-trt-trait { color: #d4d4d8; }
 .gjs-trt-trait-name { color: #a1a1aa; font-size: 12px; }
 .gjs-trt-trait .gjs-field { width: 100%; }
+.gjs-field-wrp--key-values .gjs-field {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  width: 100%;
+}
+.gs-kv-input {
+  width: 100%;
+  min-height: 60px;
+  resize: vertical;
+  background: #1b1c1f;
+  color: #e4e4e7;
+  border: 1px solid #34353a;
+  border-radius: 7px;
+  padding: 6px 8px;
+  font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+.gs-kv-input:focus { outline: none; border-color: #7d4bff; }
 
 /* Toolbar / badges / placeholders on canvas */
 .gjs-toolbar {

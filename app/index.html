@@ -1209,6 +1209,110 @@
           if (cat) cat.set('open', true);
         });
 
+        /* ------------------------------------------------------------------ */
+        /*  Properties panel: link traits + custom attributes (key=value)      */
+        /* ------------------------------------------------------------------ */
+        const KV_TRAIT = 'gs-attributes';
+        const KV_RESERVED = ['id', 'class', 'style', 'href', 'target', 'title', 'alt'];
+        const isKvReserved = (k) =>
+          KV_RESERVED.includes(k) || /^on/i.test(k) || k.indexOf('data-gjs-') === 0;
+
+        function gsKvToString(attrs) {
+          return Object.keys(attrs || {})
+            .filter((k) => !isKvReserved(k))
+            .sort()
+            .map((k) => `${k}=${String(attrs[k]).replace(/[\r\n]+/g, ' ')}`)
+            .join('\n');
+        }
+
+        function gsKvApply(cmp, text) {
+          const wanted = {};
+          String(text || '')
+            .split('\n')
+            .forEach((line) => {
+              const part = line.trim();
+              if (!part) return;
+              const eq = part.indexOf('=');
+              const k = (eq > -1 ? part.slice(0, eq) : part).trim();
+              if (!k || isKvReserved(k)) return;
+              let v = eq > -1 ? part.slice(eq + 1).trim() : '';
+              if (/^(".*"|'.*')$/.test(v)) v = v.slice(1, -1);
+              wanted[k] = v;
+            });
+          const cur = cmp.getAttributes();
+          const toRemove = Object.keys(cur).filter((k) => !isKvReserved(k) && !(k in wanted));
+          const toAdd = {};
+          Object.keys(wanted).forEach((k) => {
+            if (String(cur[k] ?? '') !== wanted[k]) toAdd[k] = wanted[k];
+          });
+          if (toRemove.length) cmp.removeAttributes(toRemove);
+          if (Object.keys(toAdd).length) cmp.addAttributes(toAdd);
+          return toRemove.length || Object.keys(toAdd).length > 0;
+        }
+
+        editor.Traits.addType('key-values', {
+          init() {
+            if (this.target && this.target.on) {
+              this.listenTo(this.target, 'change:attributes', () => {
+                const el = this.getInputElem();
+                const v = gsKvToString(this.target.getAttributes());
+                if (el && el.value !== v) el.value = v;
+              });
+            }
+          },
+          createInput() {
+            const ta = document.createElement('textarea');
+            ta.className = 'gs-kv-input';
+            ta.rows = 3;
+            ta.spellcheck = false;
+            ta.placeholder = 'data-size="lg"\naria-label="Hero"';
+            ta.value = gsKvToString(this.target.getAttributes());
+            return ta;
+          },
+          onChange() {
+            const el = this.getInputElem();
+            if (el) gsKvApply(this.target, el.value);
+            this.postUpdate();
+          },
+        });
+
+        editor.DomComponents.addType('link', {
+          model: {
+            defaults: {
+              traits: [
+                { type: 'text', name: 'href', label: 'Link URL', placeholder: 'https://example.com' },
+                {
+                  type: 'select',
+                  name: 'target',
+                  label: 'Open link in',
+                  options: [
+                    { value: '', name: 'Same tab' },
+                    { value: '_self', name: 'Same tab (self)' },
+                    { value: '_blank', name: 'New tab' },
+                    { value: '_parent', name: 'Parent frame' },
+                    { value: '_top', name: 'Top frame' },
+                  ],
+                },
+                { type: 'text', name: 'title', label: 'Tooltip', placeholder: 'Text shown on hover' },
+                { type: 'key-values', name: KV_TRAIT, label: 'Custom attributes' },
+              ],
+            },
+          },
+        });
+
+        const kvTraited = new Set();
+        editor.on('component:selected', (cmp) => {
+          if (!cmp || cmp.get('tagName') === 'body' || kvTraited.has(cmp.cid)) return;
+          if (cmp.getTrait(KV_TRAIT)) return;
+          try {
+            cmp.get('traits').add({ type: 'key-values', name: KV_TRAIT, label: 'Custom attributes' });
+            kvTraited.add(cmp.cid);
+            editor.select(cmp);
+          } catch (e) {
+            kvTraited.add(cmp.cid);
+          }
+        });
+
         window.gjsEditor = editor;
 
         /* ------------------------------------------------------------------ */
@@ -2271,7 +2375,7 @@
               '<li><b>Blocks</b> — drag components onto the canvas.</li>' +
               '<li><b>Layers</b> — inspect and reorder the component tree.</li>' +
               '<li><b>Styles</b> — style the selected element (selectors, layout, typography…).</li>' +
-              '<li><b>Properties</b> — edit traits of the selected element.</li>' +
+              '<li><b>Properties</b> — edit traits of the selected element (links: URL, open-in-new-tab; custom attributes as key=value lines on any element).</li>' +
               '<li><b>Assets</b> — manage images and upload new ones.</li>' +
               '<li><b>Import</b> — on the Projects screen, import a saved project (.json: every page, symbol, asset and style) or a website .zip as a new project.</li>' +
               '<li><b>Export</b> — download the project as a .json file, or the whole site as a self-contained .zip (index.html plus one file per page, with HTML, CSS and JS).</li>' +
