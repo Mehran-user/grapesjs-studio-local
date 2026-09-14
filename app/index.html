@@ -164,7 +164,7 @@
         <button type="button" class="gs-btn gs-btn--ghost" id="previewNewTab">Open in new tab</button>
         <button type="button" class="gs-btn gs-btn--primary" id="previewClose">Close preview</button>
       </div>
-      <div class="gs-preview__frame">
+      <div class="gs-preview__frame" id="previewHost">
         <iframe id="previewFrame" allow="fullscreen; autoplay; clipboard-write" title="Site preview"></iframe>
       </div>
     </div>
@@ -2010,23 +2010,84 @@
 
         let _previewHtml = null;
         let _previewUrl = null;
+        let _previewPageId = null;
 
-        function openSitePreview() {
-          const preview = el('preview');
-          const frame = el('previewFrame');
-          const page = editor.Pages.getSelected();
+        function previewPagesMap() {
+          const map = new Map();
+          editor.Pages.getAll().forEach((page, i) => {
+            const name = String(page.getName() || '');
+            const base = i === 0 ? 'index' : slug(name) || 'page-' + (i + 1);
+            const keys = new Set([base, base + '.html', page.getId()]);
+            if (i === 0) {
+              keys.add('index');
+              keys.add('index.html');
+            }
+            if (name) {
+              keys.add(name.toLowerCase());
+              keys.add(name.toLowerCase() + '.html');
+            }
+            if (i > 0) {
+              keys.add(slug(name));
+              keys.add(slug(name) + '.html');
+            }
+            keys.forEach((k) => map.set(k.toLowerCase().replace(/^\//, ''), page));
+          });
+          return map;
+        }
+
+        function currentPreviewPage() {
+          const pages = editor.Pages.getAll();
+          return _previewPageId ? pages.find((p) => p.getId() === _previewPageId) : editor.Pages.getSelected();
+        }
+
+        function renderPreviewDoc() {
+          const page = currentPreviewPage() || editor.Pages.getSelected();
           const name = page ? page.getName() : 'Untitled';
           const dev = editor.getDevice ? editor.getDevice() : '';
           _previewHtml = buildPageDoc(page);
           el('previewName').textContent = 'Preview — ' + name;
           el('previewDev').textContent = dev ? 'Viewing at ' + dev + ' width' : 'Viewing at browser width';
+          const host = el('previewHost');
+          const old = el('previewFrame');
+          const frame = document.createElement('iframe');
+          frame.id = 'previewFrame';
+          frame.allow = 'fullscreen; autoplay; clipboard-write';
+          frame.title = 'Site preview';
+          if (old) old.remove();
+          host.appendChild(frame);
+          frame.srcdoc = _previewHtml;
+        }
+
+        function previewFrameClickHandler(e) {
+          const a = e.target.closest ? e.target.closest('a[href]') : null;
+          if (!a) return;
+          const target = a.target || '';
+          if (target === '_blank') return;
+          const href = a.getAttribute('href') || '';
+          if (!href || href.charAt(0) === '#' || /^(https?:|mailto:|tel:|javascript:|data:)/i.test(href)) return;
+          let clean = href.split(/[?#]/)[0].replace(/^\.\//, '').replace(/^\/+/, '').replace(/\/+$/, '');
+          try {
+            clean = decodeURIComponent(clean);
+          } catch (err) {
+            /* keep as-is */
+          }
+          clean = clean.toLowerCase();
+          if (!clean) return;
+          const page = previewPagesMap().get(clean);
+          if (!page) return;
+          e.preventDefault();
+          e.stopPropagation();
+          if (page.getId() === _previewPageId) return;
+          _previewPageId = page.getId();
+          renderPreviewDoc();
+        }
+
+        function openSitePreview() {
+          const preview = el('preview');
+          _previewPageId = null;
           preview.hidden = false;
-          requestAnimationFrame(() => {
-            preview.classList.add('open');
-            frame.removeAttribute('src');
-            frame.srcdoc = '';
-            requestAnimationFrame(() => (frame.srcdoc = _previewHtml));
-          });
+          requestAnimationFrame(() => preview.classList.add('open'));
+          renderPreviewDoc();
         }
 
         function closeSitePreview() {
@@ -2035,18 +2096,27 @@
           preview.classList.remove('open');
           setTimeout(() => {
             preview.hidden = true;
-            el('previewFrame').removeAttribute('srcdoc');
+            const frame = el('previewFrame');
+            if (frame) frame.removeAttribute('srcdoc');
           }, 160);
         }
 
         function previewInNewTab() {
-          _previewHtml = buildPageDoc(editor.Pages.getSelected());
+          const page = currentPreviewPage() || editor.Pages.getSelected();
+          _previewHtml = buildPageDoc(page);
           if (_previewUrl) URL.revokeObjectURL(_previewUrl);
           const blob = new Blob([_previewHtml], { type: 'text/html' });
           _previewUrl = URL.createObjectURL(blob);
           const win = window.open(_previewUrl, '_blank');
           if (!win) showToast('Allow pop-ups to open the preview in a new tab', 'error');
         }
+
+        el('previewHost').addEventListener('load', (ev) => {
+          const frame = ev.target;
+          if (!frame || frame.tagName !== 'IFRAME') return;
+          const doc = frame.contentDocument;
+          if (doc) doc.addEventListener('click', previewFrameClickHandler, true);
+        }, true);
 
         function toggleFullscreen() {
           const target = document.querySelector('.gs-app');
