@@ -1300,17 +1300,19 @@
           },
         });
 
-        const kvTraited = new Set();
-        editor.on('component:selected', (cmp) => {
-          if (!cmp || cmp.get('tagName') === 'body' || kvTraited.has(cmp.cid)) return;
+        function ensureKvTrait(cmp) {
+          if (!cmp || cmp.get('tagName') === 'body') return;
           if (cmp.getTrait(KV_TRAIT)) return;
           try {
             cmp.get('traits').add({ type: 'key-values', name: KV_TRAIT, label: 'Custom attributes' });
-            kvTraited.add(cmp.cid);
-            editor.select(cmp);
           } catch (e) {
-            kvTraited.add(cmp.cid);
+            /* ignore */
           }
+        }
+        editor.on('component:add', (cmp) => ensureKvTrait(cmp));
+        editor.on('component:selected', (cmp) => {
+          ensureKvTrait(cmp);
+          editor.select(cmp);
         });
 
         window.gjsEditor = editor;
