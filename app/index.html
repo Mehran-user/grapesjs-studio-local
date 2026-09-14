@@ -1312,7 +1312,6 @@
         editor.on('component:add', (cmp) => ensureKvTrait(cmp));
         editor.on('component:selected', (cmp) => {
           ensureKvTrait(cmp);
-          editor.select(cmp);
         });
 
         window.gjsEditor = editor;
@@ -2455,7 +2454,13 @@
 
         function scheduleSave() {
           clearTimeout(saveTimer);
-          saveTimer = setTimeout(persistCurrent, 600);
+          saveTimer = setTimeout(() => {
+            if (editor.getEditing()) {
+              scheduleSave();
+              return;
+            }
+            persistCurrent();
+          }, 600);
         }
 
         const AUTOSAVE_EVENTS =
